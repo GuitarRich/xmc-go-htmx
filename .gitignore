@@ -4,6 +4,7 @@
 node_modules
 
 # Binaries for programs and plugins
+bin
 *.exe
 *.exe~
 *.dll
