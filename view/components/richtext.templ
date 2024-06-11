@@ -1,0 +1,13 @@
+package components
+
+import (
+    "github.com/guitarrich/headless-go-htmx/model"
+    "github.com/guitarrich/headless-go-htmx/sitecore"
+)
+
+templ RichText(props model.PlaceholderComponent) {
+    <div class={sitecore.DecorateComponent("component rich-text", props)}>
+        @sitecore.RenderRichText(props.Fields["Text"])
+    </div>
+}
+

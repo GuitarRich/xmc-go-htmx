@@ -1,0 +1,14 @@
+package components
+
+import (
+    "github.com/guitarrich/headless-go-htmx/model"
+    "github.com/guitarrich/headless-go-htmx/sitecore"
+)
+
+templ Container(component model.PlaceholderComponent) {
+    <div clas={sitecore.DecorateComponent("container container-default", component)}>
+        <div class="row">
+            @RenderPlaceholder("container-" + component.Params.DynamicPlaceholderID, component.Placeholders)
+        </div>
+    </div>
+}

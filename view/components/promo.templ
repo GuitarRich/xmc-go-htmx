@@ -1,0 +1,25 @@
+package components 
+
+import (
+    "fmt"
+    "github.com/guitarrich/headless-go-htmx/model"
+    "github.com/guitarrich/headless-go-htmx/sitecore"
+)
+
+templ Promo(data model.PlaceholderComponent) {
+    <div class={ "component promo " + data.Params.GridParameters + " " + data.Params.Styles}>
+        @templ.Raw(fmt.Sprintf("<!-- Promo Component Data: %s -->", data))
+        <h2>This is a promo</h2>
+        <div class="component-content">
+            <div class="field-promotext">
+                @sitecore.RenderRichText(data.Fields["PromoText"])
+            </div>
+            <div class="field-promolink">
+                @sitecore.RenderLink(data.Fields["PromoLink"])
+            </div>
+            <div class="field-promoimage">
+                @sitecore.RenderImage(data.Fields["PromoIcon"])
+            </div>
+        </div>
+    </div>
+}

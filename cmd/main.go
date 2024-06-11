@@ -9,9 +9,10 @@ import (
 func main() {
 	app := echo.New()
 
-	app.Static("/css", "public/css")
-	app.Static("/js", "public/js")
-	app.Static("/img", "public/img")
+	app.Static("/favicon.ico", "favicon.ico")
+	app.Static("/css", "css")
+	app.Static("/js", "js")
+	app.Static("/img", "img")
 
 	app.Use(middleware.Logger())
 

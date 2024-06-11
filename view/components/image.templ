@@ -1,0 +1,14 @@
+package components
+
+import (
+    "github.com/guitarrich/headless-go-htmx/model"
+    "github.com/guitarrich/headless-go-htmx/sitecore"
+)
+
+templ ImageComponent(component model.PlaceholderComponent) {
+    <div class={sitecore.DecorateComponent("image", component)}>
+        @sitecore.RenderImage(component.Fields["Image"])
+    </div>
+}
+
+

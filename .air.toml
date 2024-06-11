@@ -4,9 +4,9 @@ testdata_dir = "testdata"
 
 [build]
   bin = "./bin/headless-go-htmx"
-  cmd = "templ generate && go build -o ./bin/headless-go-htmx ./cmd/main.go"
+  cmd = "npm run build && templ generate && go build -o ./bin/headless-go-htmx ./cmd/main.go"
   delay = 1000
-  exclude_dir = ["assets", "tmp", "vendor", "frontend"]
+  exclude_dir = ["node_modules", "assets", "tmp", "vendor", "frontend"]
   exclude_file = []
   exclude_regex = [".*_templ.go"]
   exclude_unchanged = false

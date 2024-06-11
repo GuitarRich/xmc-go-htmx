@@ -1,0 +1,10 @@
+{
+    "devDependencies": {
+        "@tailwindcss/typography": "github:tailwindcss/typography",
+        "tailwindcss": "^3.4.4"
+    },
+    "scripts": {
+        "build": "tailwindcss build ./css/tailwind.css -o css/main.css",
+        "watch": "tailwindcss build ./css/tailwind.css -o css/main.css --watch"
+    }
+}

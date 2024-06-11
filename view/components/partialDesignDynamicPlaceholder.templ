@@ -1,0 +1,9 @@
+package components
+
+import (
+    "github.com/guitarrich/headless-go-htmx/model"
+)
+
+templ RenderPartialDesignDynamicPlaceholder(placeholderKey string, props model.PlaceholderComponent) {
+    @RenderPlaceholder(props.Params.Sig, props.Placeholders)
+}

@@ -2,18 +2,19 @@ package layout
 
 import (
     "github.com/guitarrich/headless-go-htmx/model"
+    "github.com/guitarrich/headless-go-htmx/view/components"
 )
 
-templ MainLayout(pageData model.PageData) {
+templ MainLayout(data model.RouteData) {
     @Base() {
         <header>
-            <h1>{pageData.Title}</h1>
+            @components.RenderPlaceholder("headless-header", data.Placeholders["headless-header"])
         </header>
         <main>
-            <h2>Welcome to Headless Go Htmx</h2>
+            @components.RenderPlaceholder("headless-main", data.Placeholders["headless-main"])
         </main>
         <footer>
-            <p>This is a footer</p>
+            @components.RenderPlaceholder("headless-footer", data.Placeholders["headless-footer"])
         </footer>
     }
 }

@@ -1,0 +1,36 @@
+package components
+
+import (
+    "fmt"
+    "github.com/guitarrich/headless-go-htmx/model"
+)
+
+templ RenderPlaceholder(placeholderKey string, placeholders []model.PlaceholderComponent) {
+    <div class="placeholder row">
+        @templ.Raw(fmt.Sprintf("<!-- Placeholder: [%s] -->", placeholderKey))
+        for _, component := range placeholders {
+            @RenderComponent(component)
+        }
+    </div>
+}
+
+templ RenderComponent(component model.PlaceholderComponent) {
+    @GetComponent(component.ComponentName, component)
+}
+
+func GetComponent(componentName string, component model.PlaceholderComponent) templ.Component {
+    funcMap := map[string]templ.Component {
+        "Promo": Promo(component),
+        "PartialDesignDynamicPlaceholder": RenderPartialDesignDynamicPlaceholder(component.Params.DynamicPlaceholderID, component),
+        "RichText": RichText(component),
+        "Image": ImageComponent(component),
+        "Container": Container(component),
+    }
+
+    c := funcMap[componentName]
+    if (c == nil) {
+        fmt.Println("Component not found: " + componentName)
+        return templ.Raw("")
+    }
+    return c
+}
