@@ -38,7 +38,7 @@ func MainLayout(data model.RouteData) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.RenderPlaceholder("headless-header", data.Placeholders["headless-header"]).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.RenderPlaceholder("headless-header", data.Placeholders).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -46,7 +46,7 @@ func MainLayout(data model.RouteData) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.RenderPlaceholder("headless-main", data.Placeholders["headless-main"]).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.RenderPlaceholder("headless-main", data.Placeholders).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -54,7 +54,7 @@ func MainLayout(data model.RouteData) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.RenderPlaceholder("headless-footer", data.Placeholders["headless-footer"]).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.RenderPlaceholder("headless-footer", data.Placeholders).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

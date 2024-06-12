@@ -5,13 +5,20 @@ import (
     "github.com/guitarrich/headless-go-htmx/model"
 )
 
-templ RenderPlaceholder(placeholderKey string, placeholders []model.PlaceholderComponent) {
-    <div class="placeholder row">
+templ RenderPlaceholder(placeholderKey string, placeholders map[string][]model.PlaceholderComponent) {
+    <div class="flex flex-row w-full">
+        {Log("Rendering placeholder: " + placeholderKey)}
         @templ.Raw(fmt.Sprintf("<!-- Placeholder: [%s] -->", placeholderKey))
-        for _, component := range placeholders {
+        for _, component := range GetPlaceholder(placeholderKey, placeholders) {
+            {Log(" --> Rendering component: " + component.ComponentName)}
+            @templ.Raw(fmt.Sprintf("<!-- Component: [%s] -->", component.ComponentName))
             @RenderComponent(component)
         }
     </div>
+}
+
+func GetPlaceholder(placeholderKey string, placeholders map[string][]model.PlaceholderComponent) []model.PlaceholderComponent {
+    return placeholders[placeholderKey]
 }
 
 templ RenderComponent(component model.PlaceholderComponent) {
@@ -23,7 +30,7 @@ func GetComponent(componentName string, component model.PlaceholderComponent) te
         "Promo": Promo(component),
         "PartialDesignDynamicPlaceholder": RenderPartialDesignDynamicPlaceholder(component.Params.DynamicPlaceholderID, component),
         "RichText": RichText(component),
-        "Image": ImageComponent(component),
+        "Image": Image(component),
         "Container": Container(component),
     }
 
@@ -33,4 +40,9 @@ func GetComponent(componentName string, component model.PlaceholderComponent) te
         return templ.Raw("")
     }
     return c
+}
+
+func Log(message string) string {
+    fmt.Println(message)
+    return ""
 }

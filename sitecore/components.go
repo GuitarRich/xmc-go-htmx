@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"reflect"
+	//	"reflect"
 
 	"github.com/a-h/templ"
 	"github.com/guitarrich/headless-go-htmx/model"
@@ -15,7 +15,7 @@ func DecorateComponent(cssClass string, props model.PlaceholderComponent) string
 }
 
 func RenderRichText(field interface{}) templ.Component {
-	fmt.Println("RenderRichText")
+	fmt.Println("   --> RenderRichText")
 	fmt.Println(field)
 	scField, ok := field.(model.ScField)
 	if !ok {
@@ -29,7 +29,7 @@ func RenderRichText(field interface{}) templ.Component {
 }
 
 func RenderLink(field interface{}) templ.Component {
-	fmt.Println("RenderLink")
+	fmt.Println("   --> RenderLink")
 	fmt.Println(field)
 	scField, ok := field.(model.ScField)
 	if !ok {
@@ -42,13 +42,13 @@ func RenderLink(field interface{}) templ.Component {
 		return nil
 	}
 
-	anchor := linkField["anchor"].(string)
-	querystring := linkField["querystring"].(string)
-	href := linkField["href"].(string)
-	text := linkField["text"].(string)
-	target := linkField["target"].(string)
-	title := linkField["title"].(string)
-	class := linkField["class"].(string)
+	anchor := getSafeString(linkField["anchor"])
+	querystring := getSafeString(linkField["querystring"])
+	href := getSafeString(linkField["href"])
+	text := getSafeString(linkField["text"])
+	target := getSafeString(linkField["target"])
+	title := getSafeString(linkField["title"])
+	class := getSafeString(linkField["class"])
 
 	if querystring != "" {
 		href += "?" + querystring
@@ -77,16 +77,14 @@ func RenderLink(field interface{}) templ.Component {
 }
 
 func RenderImage(field interface{}) templ.Component {
-	fmt.Println("RenderImage")
+	fmt.Println("   --> RenderImage")
 	fmt.Println(field)
 	scField, ok := field.(model.ScField)
 	if !ok {
 		fmt.Println("RenderImage: not a ScField")
 		return nil
 	}
-	fmt.Println(reflect.TypeOf(scField.Value))
 	imageField, ok := scField.Value.(map[string]interface{})
-	fmt.Println(reflect.TypeOf(imageField))
 	if !ok {
 		fmt.Println("RenderImage: not an imageField")
 		return nil
@@ -114,4 +112,11 @@ func RenderImage(field interface{}) templ.Component {
 		_, err := io.WriteString(w, img)
 		return err
 	})
+}
+
+func getSafeString(field interface{}) string {
+	if field == nil {
+		return ""
+	}
+	return fmt.Sprintf("%s", field)
 }

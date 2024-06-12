@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/guitarrich/headless-go-htmx/model"
 	"github.com/guitarrich/headless-go-htmx/sitecore"
@@ -25,20 +26,43 @@ func (h MainLayoutHandler) HandleLayout(c echo.Context) error {
 	result := sitecore.RunQuery(query)
 
 	jsonString, _ := json.Marshal(result)
-	fmt.Println(string(jsonString))
 
 	layoutResponse := model.LayoutResponse{}
 	json.Unmarshal(jsonString, &layoutResponse)
 
-	fmt.Println("Placeholders")
-	for key, val := range layoutResponse.Data.Layout.Item.Rendered.Sitecore.Route.Placeholders {
-		fmt.Println(key, val)
-		fmt.Println(" -> Components:")
+	fmt.Println("Updating dynamic placeholders...")
+	var tmp model.PlaceholderComponent
+	HandleDynamicPlaceholders(tmp, layoutResponse.Data.Layout.Item.Rendered.Sitecore.Route.Placeholders, 1)
+	/*
+		fmt.Println("Running through placeholders...")
+		fmt.Println("There are [" + fmt.Sprint(len(layoutResponse.Data.Layout.Item.Rendered.Sitecore.Route.Placeholders)) + "] placeholders")
+		for key, val := range layoutResponse.Data.Layout.Item.Rendered.Sitecore.Route.Placeholders {
+			fmt.Println("PlaceholderKey: [" + key + "]")
+			fmt.Println(" -> Components:")
 
-		for i, component := range val {
-			fmt.Println(i, component)
+			for i, component := range val {
+				fmt.Println(i, component)
+			}
 		}
-	}
+	*/
 
 	return render(c, layout.MainLayout(layoutResponse.Data.Layout.Item.Rendered.Sitecore.Route))
+}
+
+func HandleDynamicPlaceholders(component model.PlaceholderComponent, placeholders map[string][]model.PlaceholderComponent, level int) {
+
+	for key, val := range placeholders {
+		fmt.Printf(" ==> PlaceholderKey: [%s]\n", key)
+		if strings.HasSuffix(key, "-{*}") {
+			fmt.Println("   -> Has dynamic placeholder")
+			newKey := strings.Replace(key, "{*}", component.Params.DynamicPlaceholderID, -1)
+			placeholders[newKey] = val
+		}
+		for _, component := range val {
+			if len(component.Placeholders) > 0 {
+				fmt.Println("   -> Has nested placholders")
+				HandleDynamicPlaceholders(component, component.Placeholders, level+1)
+			}
+		}
+	}
 }

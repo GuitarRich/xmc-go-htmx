@@ -4,7 +4,7 @@
         "tailwindcss": "^3.4.4"
     },
     "scripts": {
-        "build": "tailwindcss build ./css/tailwind.css -o css/main.css",
-        "watch": "tailwindcss build ./css/tailwind.css -o css/main.css --watch"
+        "build": "tailwindcss build -i ./css/tailwind.css -o css/main.css",
+        "watch": "tailwindcss build -i ./css/tailwind.css -o css/main.css --watch"
     }
 }

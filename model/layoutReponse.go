@@ -20,8 +20,8 @@ type PlaceholderComponent struct {
 		Sig                  string `json:"sig"`
 		Ph                   string `json:"ph"`
 	} `json:"params"`
-	Fields       map[string]ScField     `json:"fields"`
-	Placeholders []PlaceholderComponent `json:"placeholders"`
+	Fields       map[string]ScField                `json:"fields"`
+	Placeholders map[string][]PlaceholderComponent `json:"placeholders"`
 }
 
 type RouteData struct {

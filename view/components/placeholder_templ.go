@@ -15,7 +15,7 @@ import (
 	"github.com/guitarrich/headless-go-htmx/model"
 )
 
-func RenderPlaceholder(placeholderKey string, placeholders []model.PlaceholderComponent) templ.Component {
+func RenderPlaceholder(placeholderKey string, placeholders map[string][]model.PlaceholderComponent) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -28,7 +28,16 @@ func RenderPlaceholder(placeholderKey string, placeholders []model.PlaceholderCo
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"placeholder row\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-row w-full\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var2 string
+		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(Log("Rendering placeholder: " + placeholderKey))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/placeholder.templ`, Line: 10, Col: 56}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -36,7 +45,24 @@ func RenderPlaceholder(placeholderKey string, placeholders []model.PlaceholderCo
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		for _, component := range placeholders {
+		for _, component := range GetPlaceholder(placeholderKey, placeholders) {
+			var templ_7745c5c3_Var3 string
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(Log(" --> Rendering component: " + component.ComponentName))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/placeholder.templ`, Line: 13, Col: 72}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templ.Raw(fmt.Sprintf("<!-- Component: [%s] -->", component.ComponentName)).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" ")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
 			templ_7745c5c3_Err = RenderComponent(component).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -53,6 +79,10 @@ func RenderPlaceholder(placeholderKey string, placeholders []model.PlaceholderCo
 	})
 }
 
+func GetPlaceholder(placeholderKey string, placeholders map[string][]model.PlaceholderComponent) []model.PlaceholderComponent {
+	return placeholders[placeholderKey]
+}
+
 func RenderComponent(component model.PlaceholderComponent) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
@@ -61,9 +91,9 @@ func RenderComponent(component model.PlaceholderComponent) templ.Component {
 			defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var2 == nil {
-			templ_7745c5c3_Var2 = templ.NopComponent
+		templ_7745c5c3_Var4 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var4 == nil {
+			templ_7745c5c3_Var4 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		templ_7745c5c3_Err = GetComponent(component.ComponentName, component).Render(ctx, templ_7745c5c3_Buffer)
@@ -82,7 +112,7 @@ func GetComponent(componentName string, component model.PlaceholderComponent) te
 		"Promo":                           Promo(component),
 		"PartialDesignDynamicPlaceholder": RenderPartialDesignDynamicPlaceholder(component.Params.DynamicPlaceholderID, component),
 		"RichText":                        RichText(component),
-		"Image":                           ImageComponent(component),
+		"Image":                           Image(component),
 		"Container":                       Container(component),
 	}
 
@@ -92,4 +122,9 @@ func GetComponent(componentName string, component model.PlaceholderComponent) te
 		return templ.Raw("")
 	}
 	return c
+}
+
+func Log(message string) string {
+	fmt.Println(message)
+	return ""
 }

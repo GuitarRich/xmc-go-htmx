@@ -5,9 +5,12 @@ import (
     "github.com/guitarrich/headless-go-htmx/sitecore"
 )
 
-templ RichText(props model.PlaceholderComponent) {
+func RichText(props model.PlaceholderComponent) templ.Component {
+    return defaultVariant(props)
+}
+
+templ defaultVariant(props model.PlaceholderComponent) {
     <div class={sitecore.DecorateComponent("component rich-text", props)}>
         @sitecore.RenderRichText(props.Fields["Text"])
     </div>
 }
-

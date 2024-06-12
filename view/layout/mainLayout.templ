@@ -8,13 +8,13 @@ import (
 templ MainLayout(data model.RouteData) {
     @Base() {
         <header>
-            @components.RenderPlaceholder("headless-header", data.Placeholders["headless-header"])
+            @components.RenderPlaceholder("headless-header", data.Placeholders)
         </header>
         <main>
-            @components.RenderPlaceholder("headless-main", data.Placeholders["headless-main"])
+            @components.RenderPlaceholder("headless-main", data.Placeholders)
         </main>
         <footer>
-            @components.RenderPlaceholder("headless-footer", data.Placeholders["headless-footer"])
+            @components.RenderPlaceholder("headless-footer", data.Placeholders)
         </footer>
     }
 }

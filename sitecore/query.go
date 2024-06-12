@@ -21,7 +21,7 @@ func RunQuery(query string) map[string]interface{} {
 		log.Fatal(err)
 	}
 
-	fmt.Println(string(jsonData))
+	fmt.Println("Running query")
 
 	client := &http.Client{
 		Timeout: time.Second * 10,
@@ -31,15 +31,10 @@ func RunQuery(query string) map[string]interface{} {
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("sc_apikey", GetEnvVar("SITECORE_API_KEY"))
 
-	fmt.Println(req)
-	fmt.Println("Calling client")
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Println("Response")
-	fmt.Println(resp)
 
 	data, err := io.ReadAll(resp.Body)
 	if err != nil {
