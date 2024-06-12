@@ -14,6 +14,7 @@ func GetComponent(component model.PlaceholderComponent) templ.Component {
 		"RichText":                        RichText(component),
 		"Image":                           Image(component),
 		"Container":                       Container(component),
+		"Navigation":                      Navigation(component),
 	}
 
 	c := funcMap[component.ComponentName]

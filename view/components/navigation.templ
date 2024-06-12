@@ -1,0 +1,28 @@
+package components
+
+import (
+    "github.com/guitarrich/headless-go-htmx/model"
+    "fmt"
+)
+
+func Navigation(props model.PlaceholderComponent) templ.Component {
+    fmt.Println("Navigation")
+    fmt.Println(props)
+    return defaultNavigation(props)
+}
+
+templ defaultNavigation(props model.PlaceholderComponent) {
+    <nav class="w-full flex flex-wrap relative bg-gray-800 text-white">
+        <div class="w-full flex flex-wrap relative">
+            <ul class="w-full flex flex-wrap relative">
+                <li class="w-full flex flex-wrap relative">
+                    <a href="/" class="w-full flex flex-wrap relative">Home</a>
+                </li>
+                <li class="w-full flex flex-wrap relative">
+                    <a href="/" class="w-full flex flex-wrap relative">About</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+}
+

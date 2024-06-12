@@ -55,7 +55,7 @@ func Promo(data model.PlaceholderComponent) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h2>This is a promo</h2><div class=\"component-content\"><div class=\"field-promotext\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"component-content\"><div class=\"field-promotext\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
