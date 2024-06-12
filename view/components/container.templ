@@ -7,7 +7,7 @@ import (
 )
 
 templ Container(component model.PlaceholderComponent) {
-    <div clas={sitecore.DecorateComponent("container container-default", component)}>
+    <div class={sitecore.DecorateComponent("container w-full mx-auto sm:max-w-lg md:max-w-2xl lg:max-w-4xl", component)}>
         @templ.Raw(fmt.Sprintf("<!-- Placeholder: [%s] -->", "container-" + component.Params.DynamicPlaceholderID))
         @RenderPlaceholder("container-" + component.Params.DynamicPlaceholderID, component.Placeholders)
     </div>

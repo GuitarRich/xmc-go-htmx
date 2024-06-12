@@ -28,7 +28,7 @@ func RenderPlaceholder(placeholderKey string, placeholders map[string][]model.Pl
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-row w-full\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-row flex-wrap w-full\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -45,7 +45,7 @@ func RenderPlaceholder(placeholderKey string, placeholders map[string][]model.Pl
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		for _, component := range GetPlaceholder(placeholderKey, placeholders) {
+		for _, component := range placeholders[placeholderKey] {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(Log(" --> Rendering component: " + component.ComponentName))
 			if templ_7745c5c3_Err != nil {
@@ -63,7 +63,15 @@ func RenderPlaceholder(placeholderKey string, placeholders map[string][]model.Pl
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = RenderComponent(component).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = GetComponent(component).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" ")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templ.Raw(fmt.Sprintf("<!-- /Component: [%s] -->", component.ComponentName)).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -77,51 +85,6 @@ func RenderPlaceholder(placeholderKey string, placeholders map[string][]model.Pl
 		}
 		return templ_7745c5c3_Err
 	})
-}
-
-func GetPlaceholder(placeholderKey string, placeholders map[string][]model.PlaceholderComponent) []model.PlaceholderComponent {
-	return placeholders[placeholderKey]
-}
-
-func RenderComponent(component model.PlaceholderComponent) templ.Component {
-	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
-		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
-		if !templ_7745c5c3_IsBuffer {
-			templ_7745c5c3_Buffer = templ.GetBuffer()
-			defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
-		}
-		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var4 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var4 == nil {
-			templ_7745c5c3_Var4 = templ.NopComponent
-		}
-		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = GetComponent(component.ComponentName, component).Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if !templ_7745c5c3_IsBuffer {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteTo(templ_7745c5c3_W)
-		}
-		return templ_7745c5c3_Err
-	})
-}
-
-func GetComponent(componentName string, component model.PlaceholderComponent) templ.Component {
-	funcMap := map[string]templ.Component{
-		"Promo":                           Promo(component),
-		"PartialDesignDynamicPlaceholder": RenderPartialDesignDynamicPlaceholder(component.Params.DynamicPlaceholderID, component),
-		"RichText":                        RichText(component),
-		"Image":                           Image(component),
-		"Container":                       Container(component),
-	}
-
-	c := funcMap[componentName]
-	if c == nil {
-		fmt.Println("Component not found: " + componentName)
-		return templ.Raw("")
-	}
-	return c
 }
 
 func Log(message string) string {

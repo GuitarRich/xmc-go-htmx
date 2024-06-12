@@ -34,7 +34,7 @@ func MainLayout(data model.RouteData) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<header>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<header class=\"w-full flex flex-wrap relative\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -42,7 +42,7 @@ func MainLayout(data model.RouteData) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</header><main>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</header><main class=\"w-full flex flex-wrap relative\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -50,7 +50,7 @@ func MainLayout(data model.RouteData) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</main><footer>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</main><footer class=\"w-full flex flex-wrap relative bg-gray-800 text-white pt-8\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

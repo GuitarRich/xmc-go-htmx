@@ -10,7 +10,7 @@ func RichText(props model.PlaceholderComponent) templ.Component {
 }
 
 templ defaultVariant(props model.PlaceholderComponent) {
-    <div class={sitecore.DecorateComponent("component rich-text", props)}>
+    <div class={sitecore.DecorateComponent("component rich-text text-base leading-6 min-h-8 px-8 pb-4", props)}>
         @sitecore.RenderRichText(props.Fields["Text"])
     </div>
 }

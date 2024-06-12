@@ -32,7 +32,7 @@ func defaultVariant(props model.PlaceholderComponent) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		var templ_7745c5c3_Var2 = []any{sitecore.DecorateComponent("component rich-text", props)}
+		var templ_7745c5c3_Var2 = []any{sitecore.DecorateComponent("component rich-text text-base leading-6 min-h-8 px-8 pb-4", props)}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var2...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
