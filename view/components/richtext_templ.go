@@ -11,11 +11,13 @@ import "io"
 import "bytes"
 
 import (
+	"fmt"
 	"github.com/guitarrich/headless-go-htmx/model"
 	"github.com/guitarrich/headless-go-htmx/sitecore"
 )
 
 func RichText(props model.PlaceholderComponent) templ.Component {
+	fmt.Println("RichTextComponent")
 	return defaultVariant(props)
 }
 
@@ -54,7 +56,7 @@ func defaultVariant(props model.PlaceholderComponent) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = sitecore.RenderRichText(props.Fields["Text"]).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = sitecore.RenderRichText(sitecore.GetRichTextField(props.Fields, "Text")).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

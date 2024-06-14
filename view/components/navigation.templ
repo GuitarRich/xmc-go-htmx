@@ -1,28 +1,76 @@
 package components
 
 import (
-    "github.com/guitarrich/headless-go-htmx/model"
-    "fmt"
+	"github.com/guitarrich/headless-go-htmx/model"
+	"fmt"
+	"reflect"
 )
 
+type NavigationModel struct {
+	Id             string
+	Styles         []string
+	Href           string
+	Querystring    string
+	NavitaionTitle string
+	Children       []NavigationModel
+}
+
 func Navigation(props model.PlaceholderComponent) templ.Component {
-    fmt.Println("Navigation")
-    fmt.Println(props)
-    return defaultNavigation(props)
+	fmt.Println("Navigation[" + props.ComponentName + "]")
+	fmt.Println(props)
+
+	fmt.Println("Type of props.Fields is: " + reflect.TypeOf(props.Fields).String())
+	fields := props.Fields.([]interface{})[0].(map[string]interface{})
+
+	fmt.Println("fields is: " + reflect.TypeOf(fields).String())
+	// Build the model from the props
+	var model NavigationModel
+	model.Id = GetSafeString(fields["id"])
+	//	model.Styles = [ GetSafeString(props.Fields["styles"]) ]
+	model.Href = GetSafeString(fields["href"])
+	model.Querystring = GetSafeString(fields["querystring"])
+
+	return defaultNavigation(props, model)
 }
 
-templ defaultNavigation(props model.PlaceholderComponent) {
-    <nav class="w-full flex flex-wrap relative bg-gray-800 text-white">
-        <div class="w-full flex flex-wrap relative">
-            <ul class="w-full flex flex-wrap relative">
-                <li class="w-full flex flex-wrap relative">
-                    <a href="/" class="w-full flex flex-wrap relative">Home</a>
-                </li>
-                <li class="w-full flex flex-wrap relative">
-                    <a href="/" class="w-full flex flex-wrap relative">About</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+func GetSafeString(field interface{}) string {
+	scField := GetScField(field)
+	if scField.Value == nil {
+		return "scField.Value is nil"
+	}
+	return fmt.Sprintf("%s", scField.Value)
 }
 
+func GetScField(field interface{}) model.ScField {
+	fmt.Println("GetScField")
+	fmt.Println(field)
+	if field == nil {
+		fmt.Println("GetScField: nil")
+		return model.ScField{}
+	}
+	fmt.Println("field is: [" + reflect.TypeOf(field).String() + "]")
+	scField, ok := field.(model.ScField)
+	fmt.Println(scField)
+	if !ok {
+		fmt.Println("GetScField: not a ScField")
+		return model.ScField{}
+	}
+	return scField
+}
+
+templ defaultNavigation(props model.PlaceholderComponent, model NavigationModel) {
+	<nav class="w-full flex flex-wrap relative bg-gray-800 text-white">
+		<div class="w-full flex flex-wrap relative">
+			<ul class="w-full flex flex-wrap relative">
+				<li class="w-full flex flex-wrap relative">
+					<a href={ templ.SafeURL(model.Href) } class="w-full flex flex-wrap relative">{ model.NavitaionTitle }</a>
+				</li>
+				for _, child := range model.Children {
+					<li class="w-full flex flex-wrap relative">
+						<a href={ templ.SafeURL(child.Href) } class="w-full flex flex-wrap relative">{ child.NavitaionTitle }</a>
+					</li>
+				}
+			</ul>
+		</div>
+	</nav>
+}

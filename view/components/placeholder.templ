@@ -1,24 +1,25 @@
 package components
 
 import (
-    "fmt"
-    "github.com/guitarrich/headless-go-htmx/model"
+	"fmt"
+	"github.com/guitarrich/headless-go-htmx/model"
 )
 
 templ RenderPlaceholder(placeholderKey string, placeholders map[string][]model.PlaceholderComponent) {
-    <div class="flex flex-row flex-wrap w-full">
-        {Log("Rendering placeholder: " + placeholderKey)}
-        @templ.Raw(fmt.Sprintf("<!-- Placeholder: [%s] -->", placeholderKey))
-        for _, component := range placeholders[placeholderKey] {
-            {Log(" --> Rendering component: " + component.ComponentName)}
-            @templ.Raw(fmt.Sprintf("<!-- Component: [%s] -->", component.ComponentName))
-            @GetComponent(component)
-            @templ.Raw(fmt.Sprintf("<!-- /Component: [%s] -->", component.ComponentName))
-        }
-    </div>
+	{ Log("PlacholderComponent") }
+	<div class="flex flex-row flex-wrap w-full">
+		{ Log("Rendering placeholder: " + placeholderKey) }
+		@templ.Raw(fmt.Sprintf("<!-- Placeholder: [%s] -->", placeholderKey))
+		for _, component := range placeholders[placeholderKey] {
+			{ Log(" --> Rendering component: " + component.ComponentName) }
+			@templ.Raw(fmt.Sprintf("<!-- Component: [%s] -->", component.ComponentName))
+			@GetComponent(component)
+			@templ.Raw(fmt.Sprintf("<!-- /Component: [%s] -->", component.ComponentName))
+		}
+	</div>
 }
 
 func Log(message string) string {
-    fmt.Println(message)
-    return ""
+	fmt.Println(message)
+	return ""
 }

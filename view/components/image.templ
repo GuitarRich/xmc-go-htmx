@@ -1,18 +1,18 @@
 package components
 
 import (
-    "github.com/guitarrich/headless-go-htmx/model"
-    "github.com/guitarrich/headless-go-htmx/sitecore"
+	"github.com/guitarrich/headless-go-htmx/model"
+	"github.com/guitarrich/headless-go-htmx/sitecore"
+	"fmt"
 )
 
 func Image(component model.PlaceholderComponent) templ.Component {
-    return defaultImageVariant(component)
+	fmt.Println("ImageComponent")
+	return defaultImageVariant(component)
 }
 
 templ defaultImageVariant(component model.PlaceholderComponent) {
-    <div class={sitecore.DecorateComponent("image", component)}>
-        @sitecore.RenderImage(component.Fields["Image"])
-    </div>
+	<div class={ sitecore.DecorateComponent("image", component) }>
+		@sitecore.RenderImage(sitecore.GetImageField(component.Fields, "Image"))
+	</div>
 }
-
-

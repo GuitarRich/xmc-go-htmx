@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io"
+
 	//	"reflect"
 
 	"github.com/a-h/templ"
@@ -14,61 +15,52 @@ func DecorateComponent(cssClass string, props model.PlaceholderComponent) string
 	return fmt.Sprintf("%s %s %s", cssClass, props.Params.GridParameters, props.Params.Styles)
 }
 
-func RenderRichText(field interface{}) templ.Component {
+func RenderRichText(field model.RichTextField) templ.Component {
 	fmt.Println("   --> RenderRichText")
-	fmt.Println(field)
-	scField, ok := field.(model.ScField)
-	if !ok {
-		fmt.Println("RenderRichText: not a map")
-		return nil
-	}
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
-		_, err := io.WriteString(w, fmt.Sprintf("%s", scField.Value))
+		_, err := io.WriteString(w, fmt.Sprintf("%s", field.Value))
 		return err
 	})
 }
 
-func RenderLink(field interface{}) templ.Component {
+func GetRichTextField(fields interface{}, fieldName string) model.RichTextField {
+	fieldMap, ok := fields.(map[string]interface{})
+	if !ok {
+		fmt.Println("GetRichTextField: not a map")
+		return model.RichTextField{}
+	}
+	baseField, ok := fieldMap[fieldName].(map[string]interface{})["value"]
+	if !ok {
+		fmt.Println("GetRichTextField: not a field")
+		return model.RichTextField{}
+	}
+
+	var richTextField model.RichTextField
+	richTextField.Value = getSafeString(baseField)
+	return richTextField
+}
+
+func RenderLink(field model.LinkField) templ.Component {
 	fmt.Println("   --> RenderLink")
-	fmt.Println(field)
-	scField, ok := field.(model.ScField)
-	if !ok {
-		fmt.Println("RenderLink: not a ScField")
-		return nil
-	}
-	linkField, ok := scField.Value.(map[string]interface{})
-	if !ok {
-		fmt.Println("RenderLink: not a linkField")
-		return nil
-	}
 
-	anchor := getSafeString(linkField["anchor"])
-	querystring := getSafeString(linkField["querystring"])
-	href := getSafeString(linkField["href"])
-	text := getSafeString(linkField["text"])
-	target := getSafeString(linkField["target"])
-	title := getSafeString(linkField["title"])
-	class := getSafeString(linkField["class"])
-
-	if querystring != "" {
-		href += "?" + querystring
+	href := field.Href
+	if field.Querystring != "" {
+		href += "?" + field.Querystring
 	}
-	if anchor != "" {
-		href += "#" + anchor
+	if field.Anchor != "" {
+		href += "#" + field.Anchor
 	}
 
 	link := fmt.Sprintf("<a  href=\"%s\"", href)
-	if target != "" {
-		link += fmt.Sprintf(" target=\"%s\"", target)
+	if field.Target != "" {
+		link += fmt.Sprintf(" target=\"%s\"", field.Target)
 	}
-	if title != "" {
-		link += fmt.Sprintf(" title=\"%s\"", title)
+	if field.Title != "" {
+		link += fmt.Sprintf(" title=\"%s\"", field.Title)
 	}
-	if class != "" {
-		link += fmt.Sprintf(" class=\"%s\"", class)
+	if field.Class != "" {
+		link += fmt.Sprintf(" class=\"%s\"", field.Class)
 	}
-
-	link += fmt.Sprintf(">%s</a>", text)
 
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
 		_, err := io.WriteString(w, link)
@@ -76,34 +68,42 @@ func RenderLink(field interface{}) templ.Component {
 	})
 }
 
-func RenderImage(field interface{}) templ.Component {
+func GetLinkField(fields interface{}, fieldName string) model.LinkField {
+	fieldMap, ok := fields.(map[string]interface{})
+	if !ok {
+		fmt.Println("GetLinkField: not a map")
+		return model.LinkField{}
+	}
+	baseField, ok := fieldMap[fieldName].(map[string]interface{})["value"].(map[string]interface{})
+	if !ok {
+		fmt.Println("GetLinkField: not a field")
+		return model.LinkField{}
+	}
+
+	var linkField model.LinkField
+	linkField.Text = getSafeString(baseField["text"])
+	linkField.Href = getSafeString(baseField["href"])
+	linkField.Anchor = getSafeString(baseField["anchor"])
+	linkField.Querystring = getSafeString(baseField["querystring"])
+	linkField.Target = getSafeString(baseField["target"])
+	linkField.Title = getSafeString(baseField["title"])
+	linkField.Class = getSafeString(baseField["class"])
+
+	return linkField
+}
+
+func RenderImage(field model.ImageField) templ.Component {
 	fmt.Println("   --> RenderImage")
-	fmt.Println(field)
-	scField, ok := field.(model.ScField)
-	if !ok {
-		fmt.Println("RenderImage: not a ScField")
-		return nil
-	}
-	imageField, ok := scField.Value.(map[string]interface{})
-	if !ok {
-		fmt.Println("RenderImage: not an imageField")
-		return nil
-	}
 
-	src := imageField["src"].(string)
-	alt := imageField["alt"].(string)
-	width := imageField["width"].(string)
-	height := imageField["height"].(string)
-
-	img := fmt.Sprintf("<img src=\"%s\"", src)
-	if alt != "" {
-		img += fmt.Sprintf(" alt=\"%s\"", alt)
+	img := fmt.Sprintf("<img src=\"%s\"", field.Src)
+	if field.Alt != "" {
+		img += fmt.Sprintf(" alt=\"%s\"", field.Alt)
 	}
-	if width != "" {
-		img += fmt.Sprintf(" width=\"%s\"", width)
+	if field.Width != "" {
+		img += fmt.Sprintf(" width=\"%s\"", field.Width)
 	}
-	if height != "" {
-		img += fmt.Sprintf(" height=\"%s\"", height)
+	if field.Height != "" {
+		img += fmt.Sprintf(" height=\"%s\"", field.Height)
 	}
 
 	img += fmt.Sprintf(" />")
@@ -119,4 +119,25 @@ func getSafeString(field interface{}) string {
 		return ""
 	}
 	return fmt.Sprintf("%s", field)
+}
+
+func GetImageField(fields interface{}, fieldName string) model.ImageField {
+	fieldMap, ok := fields.(map[string]interface{})
+	if !ok {
+		fmt.Println("GetImageField: not a map")
+		return model.ImageField{}
+	}
+	baseField, ok := fieldMap[fieldName].(map[string]interface{})["value"].(map[string]interface{})
+	if !ok {
+		fmt.Println("GetImageField: not a field")
+		return model.ImageField{}
+	}
+
+	var imageField model.ImageField
+	imageField.Src = getSafeString(baseField["src"])
+	imageField.Alt = getSafeString(baseField["alt"])
+	imageField.Width = getSafeString(baseField["width"])
+	imageField.Height = getSafeString(baseField["height"])
+
+	return imageField
 }

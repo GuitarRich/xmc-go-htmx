@@ -11,11 +11,13 @@ import "io"
 import "bytes"
 
 import (
+	"fmt"
 	"github.com/guitarrich/headless-go-htmx/model"
 	"github.com/guitarrich/headless-go-htmx/sitecore"
 )
 
 func Image(component model.PlaceholderComponent) templ.Component {
+	fmt.Println("ImageComponent")
 	return defaultImageVariant(component)
 }
 
@@ -54,7 +56,7 @@ func defaultImageVariant(component model.PlaceholderComponent) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = sitecore.RenderImage(component.Fields["Image"]).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = sitecore.RenderImage(sitecore.GetImageField(component.Fields, "Image")).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
