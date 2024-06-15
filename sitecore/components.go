@@ -42,6 +42,7 @@ func GetRichTextField(fields interface{}, fieldName string) model.RichTextField 
 
 func RenderLink(field model.LinkField) templ.Component {
 	fmt.Println("   --> RenderLink")
+	fmt.Println(field)
 
 	href := field.Href
 	if field.Querystring != "" {
@@ -52,15 +53,15 @@ func RenderLink(field model.LinkField) templ.Component {
 	}
 
 	link := fmt.Sprintf("<a  href=\"%s\"", href)
-	if field.Target != "" {
-		link += fmt.Sprintf(" target=\"%s\"", field.Target)
+	link += AddIfNotEmpty("target", field.Target)
+	link += AddIfNotEmpty("title", field.Title)
+	link += AddIfNotEmpty("class", field.Class)
+
+	if field.Target == "_blank" {
+		link += " rel=\"noopener noreferrer\""
 	}
-	if field.Title != "" {
-		link += fmt.Sprintf(" title=\"%s\"", field.Title)
-	}
-	if field.Class != "" {
-		link += fmt.Sprintf(" class=\"%s\"", field.Class)
-	}
+
+	link += fmt.Sprintf(">%s</a>", field.Text)
 
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
 		_, err := io.WriteString(w, link)
@@ -69,12 +70,17 @@ func RenderLink(field model.LinkField) templ.Component {
 }
 
 func GetLinkField(fields interface{}, fieldName string) model.LinkField {
+	fmt.Println("GetLinkField")
 	fieldMap, ok := fields.(map[string]interface{})
+	fmt.Println(fieldMap)
+	fmt.Println(fieldName)
 	if !ok {
 		fmt.Println("GetLinkField: not a map")
 		return model.LinkField{}
 	}
+	fmt.Println(fieldMap[fieldName])
 	baseField, ok := fieldMap[fieldName].(map[string]interface{})["value"].(map[string]interface{})
+	fmt.Println(baseField)
 	if !ok {
 		fmt.Println("GetLinkField: not a field")
 		return model.LinkField{}
@@ -96,15 +102,9 @@ func RenderImage(field model.ImageField) templ.Component {
 	fmt.Println("   --> RenderImage")
 
 	img := fmt.Sprintf("<img src=\"%s\"", field.Src)
-	if field.Alt != "" {
-		img += fmt.Sprintf(" alt=\"%s\"", field.Alt)
-	}
-	if field.Width != "" {
-		img += fmt.Sprintf(" width=\"%s\"", field.Width)
-	}
-	if field.Height != "" {
-		img += fmt.Sprintf(" height=\"%s\"", field.Height)
-	}
+	img += AddIfNotEmpty("alt", field.Alt)
+	img += AddIfNotEmpty("width", field.Width)
+	img += AddIfNotEmpty("height", field.Height)
 
 	img += fmt.Sprintf(" />")
 
@@ -112,13 +112,6 @@ func RenderImage(field model.ImageField) templ.Component {
 		_, err := io.WriteString(w, img)
 		return err
 	})
-}
-
-func getSafeString(field interface{}) string {
-	if field == nil {
-		return ""
-	}
-	return fmt.Sprintf("%s", field)
 }
 
 func GetImageField(fields interface{}, fieldName string) model.ImageField {
