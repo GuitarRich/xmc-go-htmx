@@ -7,8 +7,9 @@ import (
 )
 
 func Promo(data model.PlaceholderComponent) templ.Component {
+    fmt.Println("PromoComponent", data.Params.FieldNames)
     switch data.Params.FieldNames {
-        case "WithTex":
+        case "WithText":
             return promoWithText(data)
         default:
             return promoDefault(data)
@@ -38,6 +39,7 @@ templ promoWithText(data model.PlaceholderComponent) {
 		@templ.Raw(fmt.Sprintf("<!-- WithText Component Data: %s -->", data))
 		<div class="component-content">
 			<div class="field-withtext">
+                <h2>WithText</h2>
 				@sitecore.RenderRichText(sitecore.GetRichTextField(data.Fields, "PromoText"))
 			</div>
 		</div>

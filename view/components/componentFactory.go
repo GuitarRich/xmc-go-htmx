@@ -8,6 +8,12 @@ import (
 	"github.com/guitarrich/headless-go-htmx/model"
 )
 
+var components = map[string]interface{}{}
+
+func RegisterComponent(componentName string, component func(model.PlaceholderComponent) templ.Component) {
+	components[componentName] = component
+}
+
 func GetComponent(component model.PlaceholderComponent) templ.Component {
 	fmt.Printf("GetComponent [%s]\n", component.ComponentName)
 	fmt.Printf("Fields is type [%T]\n", component.Fields)
@@ -16,20 +22,19 @@ func GetComponent(component model.PlaceholderComponent) templ.Component {
 		fmt.Printf("Fields is a map\n")
 	}
 
-	switch component.ComponentName {
-	case "Promo":
-		return Promo(component)
-	case "PartialDesignDynamicPlaceholder":
-		return RenderPartialDesignDynamicPlaceholder(component.Params.DynamicPlaceholderID, component)
-	case "RichText":
-		return RichText(component)
-	case "Image":
-		return Image(component)
-	case "Container":
-		return Container(component)
-	case "Navigation":
-		return Navigation(component)
-	default:
-		return templ.Raw("Component Not Found")
+	if component.ComponentName == "" {
+		return templ.Raw("Component Name is empty")
 	}
+
+	// Special case for PartialDesignDynamicPlaceholder, this is an internal component
+	// and needs to be rendered differently
+	if component.ComponentName == "PartialDesignDynamicPlaceholder" {
+		return RenderPartialDesignDynamicPlaceholder(component.Params.DynamicPlaceholderID, component)
+	}
+
+	if components[component.ComponentName] == nil {
+		return templ.Raw(fmt.Sprintf("Component [%s] not found", component.ComponentName))
+	}
+
+	return components[component.ComponentName].(func(model.PlaceholderComponent) templ.Component)(component)
 }
