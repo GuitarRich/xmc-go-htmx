@@ -22,6 +22,12 @@ func (h MainLayoutHandler) HandleLayout(c echo.Context) error {
 	language := sitecore.GetEnvVar("SITECORE_LANGUAGE")
 	itemPath := c.Request().URL.Path
 
+	fmt.Println("itemPath: " + itemPath)
+	if itemPath == "/sitemap.xml" {
+		// todo: we need to stream the sitemap.xml file from Edge
+		return HandleSitemap(c)
+	}
+
 	query := sitecore.GetLayoutQuery(itemPath, language, siteName)
 	result := sitecore.RunQuery(query)
 
@@ -33,18 +39,6 @@ func (h MainLayoutHandler) HandleLayout(c echo.Context) error {
 	fmt.Println("Updating dynamic placeholders...")
 	var tmp model.PlaceholderComponent
 	HandleDynamicPlaceholders(tmp, layoutResponse.Data.Layout.Item.Rendered.Sitecore.Route.Placeholders, 1)
-	/*
-		fmt.Println("Running through placeholders...")
-		fmt.Println("There are [" + fmt.Sprint(len(layoutResponse.Data.Layout.Item.Rendered.Sitecore.Route.Placeholders)) + "] placeholders")
-		for key, val := range layoutResponse.Data.Layout.Item.Rendered.Sitecore.Route.Placeholders {
-			fmt.Println("PlaceholderKey: [" + key + "]")
-			fmt.Println(" -> Components:")
-
-			for i, component := range val {
-				fmt.Println(i, component)
-			}
-		}
-	*/
 
 	return render(c, layout.MainLayout(layoutResponse.Data.Layout.Item.Rendered.Sitecore.Route))
 }

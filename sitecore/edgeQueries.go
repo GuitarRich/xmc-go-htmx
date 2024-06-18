@@ -15,3 +15,15 @@ func GetLayoutQuery(itemPath string, language string, siteName string) string {
         }
     `, siteName, itemPath, language)
 }
+
+func GetSitemapQuery(siteName string) string {
+	return fmt.Sprintf(`
+        {
+            site {
+                siteInfo(site: "%s") {
+                    sitemap
+                }
+            }
+        }
+    `, siteName)
+}
