@@ -1,20 +1,20 @@
 package layout
 
 import (
-    "github.com/guitarrich/headless-go-htmx/model"
-    "github.com/guitarrich/headless-go-htmx/view/components"
+	"github.com/guitarrich/headless-go-htmx/model"
+	"github.com/guitarrich/headless-go-htmx/view/components"
 )
 
 templ MainLayout(data model.RouteData) {
-    @Base() {
-        <header class="w-full flex flex-wrap relative">
-            @components.RenderPlaceholder("headless-header", data.Placeholders)
-        </header>
-        <main class="w-full flex flex-wrap relative">
-            @components.RenderPlaceholder("headless-main", data.Placeholders)
-        </main>
-        <footer class="w-full flex flex-wrap relative bg-gray-800 text-white pt-8">
-            @components.RenderPlaceholder("headless-footer", data.Placeholders)
-        </footer>
-    }
+	@Base(data) {
+		<header class="w-full flex flex-wrap relative">
+			@components.RenderPlaceholder("headless-header", data.Placeholders)
+		</header>
+		<main class="w-full flex flex-wrap relative">
+			@components.RenderPlaceholder("headless-main", data.Placeholders)
+		</main>
+		<footer class="w-full flex flex-wrap relative bg-gray-800 text-white pt-8">
+			@components.RenderPlaceholder("headless-footer", data.Placeholders)
+		</footer>
+	}
 }

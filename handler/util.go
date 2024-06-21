@@ -5,6 +5,14 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func render(c echo.Context, component templ.Component) error {
-	return component.Render(c.Request().Context(), c.Response())
+func render(c echo.Context, statusCode int, component templ.Component) error {
+	buf := templ.GetBuffer()
+	defer templ.ReleaseBuffer(buf)
+
+	if err := component.Render(c.Request().Context(), buf); err != nil {
+		return err
+	}
+
+	return c.HTML(statusCode, buf.String())
+	//return component.Render(c.Request().Context(), c.Response())
 }

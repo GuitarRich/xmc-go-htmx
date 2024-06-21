@@ -42,7 +42,7 @@ func HandleSitemap(c echo.Context) error {
 		sitemap, _ := getXml(url)
 
 		fmt.Println("sitemap: " + string(sitemap))
-		return render(c, templ.Raw(string(sitemap)))
+		return render(c, http.StatusOK, templ.Raw(string(sitemap)))
 	}
 
 	return c.NoContent(http.StatusOK)

@@ -60,26 +60,42 @@ type RouteData struct {
 	Placeholders map[string][]PlaceholderComponent `json:"placeholders"`
 }
 
+type Rendered struct {
+	Sitecore struct {
+		Context struct {
+			PageEditing bool `json:"pageEditing"`
+			Site        struct {
+				Name string `json:"name"`
+			} `json:"site"`
+			PageState string `json:"pageState"`
+			EditMode  string `json:"editMode"`
+			Language  string `json:"language"`
+			ItemPath  string `json:"itemPath"`
+		} `json:"context"`
+		Route RouteData `json:"route"`
+	} `json:"sitecore"`
+}
+
 type LayoutResponse struct {
 	Data struct {
 		Layout struct {
 			Item struct {
-				Rendered struct {
-					Sitecore struct {
-						Context struct {
-							PageEditing bool `json:"pageEditing"`
-							Site        struct {
-								Name string `json:"name"`
-							} `json:"site"`
-							PageState string `json:"pageState"`
-							EditMode  string `json:"editMode"`
-							Language  string `json:"language"`
-							ItemPath  string `json:"itemPath"`
-						} `json:"context"`
-						Route RouteData `json:"route"`
-					} `json:"sitecore"`
-				} `json:"rendered"`
+				Rendered Rendered `json:"rendered"`
 			} `json:"item"`
 		} `json:"layout"`
+	} `json:"data"`
+}
+
+type NotFoundPageResponse struct {
+	Data struct {
+		Site struct {
+			SiteInfo struct {
+				ErrorHandling struct {
+					NotFoundPage struct {
+						Rendered Rendered `json:"rendered"`
+					} `json:"notFoundPage"`
+				} `json:"errorHandling"`
+			} `json:"siteInfo"`
+		} `json:"site"`
 	} `json:"data"`
 }

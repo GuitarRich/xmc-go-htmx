@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"strings"
 
 	"github.com/guitarrich/headless-go-htmx/model"
@@ -36,11 +37,16 @@ func (h MainLayoutHandler) HandleLayout(c echo.Context) error {
 	layoutResponse := model.LayoutResponse{}
 	json.Unmarshal(jsonString, &layoutResponse)
 
+	if layoutResponse.Data.Layout.Item.Rendered.Sitecore.Route.Placeholders == nil {
+		// This is a 404, so we need to render the 404 page
+		return HandleNotFound(c)
+	}
+
 	fmt.Println("Updating dynamic placeholders...")
 	var tmp model.PlaceholderComponent
 	HandleDynamicPlaceholders(tmp, layoutResponse.Data.Layout.Item.Rendered.Sitecore.Route.Placeholders, 1)
 
-	return render(c, layout.MainLayout(layoutResponse.Data.Layout.Item.Rendered.Sitecore.Route))
+	return render(c, http.StatusOK, layout.MainLayout(layoutResponse.Data.Layout.Item.Rendered.Sitecore.Route))
 }
 
 func HandleDynamicPlaceholders(component model.PlaceholderComponent, placeholders map[string][]model.PlaceholderComponent, level int) {

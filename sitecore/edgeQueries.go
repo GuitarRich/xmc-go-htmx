@@ -27,3 +27,19 @@ func GetSitemapQuery(siteName string) string {
         }
     `, siteName)
 }
+
+func GetNotFoundPageQuery(siteName string, language string) string {
+	return fmt.Sprintf(`
+        {
+            site {
+                siteInfo(site: "%s") {
+                    errorHandling(language: "%s") {
+                        notFoundPage {
+                            rendered
+                        }
+                    }
+                }
+            }
+        }
+    `, siteName, language)
+}
