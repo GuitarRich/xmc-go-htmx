@@ -55,15 +55,6 @@ func RenderPlaceholder(placeholderKey string, placeholders map[string][]model.Pl
 			return templ_7745c5c3_Err
 		}
 		for _, component := range placeholders[placeholderKey] {
-			var templ_7745c5c3_Var4 string
-			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(Log(" --> Rendering component: " + component.ComponentName))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/placeholder.templ`, Line: 14, Col: 64}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
 			templ_7745c5c3_Err = templ.Raw(fmt.Sprintf("<!-- Component: [%s] -->", component.ComponentName)).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err

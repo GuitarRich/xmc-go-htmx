@@ -74,5 +74,5 @@ func Base(data model.RouteData) templ.Component {
 }
 
 func GetBrowserTitle(data model.RouteData) string {
-	return fmt.Sprintf("%s", sitecore.GetRichTextField(data.Fields, "Title"))
+	return fmt.Sprintf("%s", sitecore.GetRichTextField(data.Fields, "Title").Value)
 }

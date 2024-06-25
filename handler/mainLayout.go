@@ -17,13 +17,12 @@ type MainLayoutHandler struct{}
 func (h MainLayoutHandler) HandleLayout(c echo.Context) error {
 
 	fmt.Println("MainLayoutHandler")
-	fmt.Println(c.Request().URL.Path)
+	fmt.Printf("Request: %s\n", c.Request().URL.Path)
 
 	siteName := sitecore.GetEnvVar("SITECORE_SITE_NAME")
 	language := sitecore.GetEnvVar("SITECORE_LANGUAGE")
 	itemPath := c.Request().URL.Path
 
-	fmt.Println("itemPath: " + itemPath)
 	if itemPath == "/sitemap.xml" {
 		// todo: we need to stream the sitemap.xml file from Edge
 		return HandleSitemap(c)
@@ -42,7 +41,6 @@ func (h MainLayoutHandler) HandleLayout(c echo.Context) error {
 		return HandleNotFound(c)
 	}
 
-	fmt.Println("Updating dynamic placeholders...")
 	var tmp model.PlaceholderComponent
 	HandleDynamicPlaceholders(tmp, layoutResponse.Data.Layout.Item.Rendered.Sitecore.Route.Placeholders, 1)
 
@@ -52,15 +50,12 @@ func (h MainLayoutHandler) HandleLayout(c echo.Context) error {
 func HandleDynamicPlaceholders(component model.PlaceholderComponent, placeholders map[string][]model.PlaceholderComponent, level int) {
 
 	for key, val := range placeholders {
-		fmt.Printf(" ==> PlaceholderKey: [%s]\n", key)
 		if strings.HasSuffix(key, "-{*}") {
-			fmt.Println("   -> Has dynamic placeholder")
 			newKey := strings.Replace(key, "{*}", component.Params.DynamicPlaceholderID, -1)
 			placeholders[newKey] = val
 		}
 		for _, component := range val {
 			if len(component.Placeholders) > 0 {
-				fmt.Println("   -> Has nested placholders")
 				HandleDynamicPlaceholders(component, component.Placeholders, level+1)
 			}
 		}

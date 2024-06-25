@@ -11,7 +11,6 @@ templ RenderPlaceholder(placeholderKey string, placeholders map[string][]model.P
 		{ Log("Rendering placeholder: " + placeholderKey) }
 		@templ.Raw(fmt.Sprintf("<!-- Placeholder: [%s] -->", placeholderKey))
 		for _, component := range placeholders[placeholderKey] {
-			{ Log(" --> Rendering component: " + component.ComponentName) }
 			@templ.Raw(fmt.Sprintf("<!-- Component: [%s] -->", component.ComponentName))
 			@GetComponent(component)
 			@templ.Raw(fmt.Sprintf("<!-- /Component: [%s] -->", component.ComponentName))

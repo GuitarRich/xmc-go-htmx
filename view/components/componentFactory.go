@@ -2,7 +2,6 @@ package components
 
 import (
 	"fmt"
-	"reflect"
 
 	"github.com/a-h/templ"
 	"github.com/guitarrich/headless-go-htmx/model"
@@ -16,11 +15,6 @@ func RegisterComponent(componentName string, component func(model.PlaceholderCom
 
 func GetComponent(component model.PlaceholderComponent) templ.Component {
 	fmt.Printf("GetComponent [%s]\n", component.ComponentName)
-	fmt.Printf("Fields is type [%T]\n", component.Fields)
-
-	if component.Fields != nil && reflect.TypeOf(component.Fields).Kind() == reflect.Map {
-		fmt.Printf("Fields is a map\n")
-	}
 
 	if component.ComponentName == "" {
 		return templ.Raw("Component Name is empty")

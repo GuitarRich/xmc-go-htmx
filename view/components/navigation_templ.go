@@ -13,7 +13,6 @@ import "bytes"
 import (
 	"fmt"
 	"github.com/guitarrich/headless-go-htmx/model"
-	"reflect"
 )
 
 type NavigationModel struct {
@@ -27,45 +26,60 @@ type NavigationModel struct {
 
 func Navigation(props model.PlaceholderComponent) templ.Component {
 	fmt.Println("Navigation[" + props.ComponentName + "]")
-	fmt.Println(props)
-
-	fmt.Println("Type of props.Fields is: " + reflect.TypeOf(props.Fields).String())
 	fields := props.Fields.([]interface{})[0].(map[string]interface{})
 
-	fmt.Println("fields is: " + reflect.TypeOf(fields).String())
-	// Build the model from the props
-	var model NavigationModel
-	model.Id = GetSafeString(fields["id"])
-	//	model.Styles = [ GetSafeString(props.Fields["styles"]) ]
-	model.Href = GetSafeString(fields["href"])
-	model.Querystring = GetSafeString(fields["querystring"])
-
+	model := buildNavigationModel(fields)
 	return defaultNavigation(props, model)
 }
 
-func GetSafeString(field interface{}) string {
-	scField := GetScField(field)
-	if scField.Value == nil {
-		return "scField.Value is nil"
+func buildNavigationModel(fields map[string]interface{}) NavigationModel {
+
+	// Build the model from the props
+	var model NavigationModel
+	model.Id = getSafeString(fields["Id"])
+	model.Href = getSafeString(fields["Href"])
+	model.Styles = getStyles(fields["Styles"])
+	model.Querystring = getSafeString(fields["Querystring"])
+	model.NavitaionTitle = getNavigationTitle(fields["NavigationTitle"])
+	model.Children = []NavigationModel{}
+
+	if fields["Children"] != nil {
+		children := fields["Children"].([]interface{})
+		for _, child := range children {
+			model.Children = append(model.Children, buildNavigationModel(child.(map[string]interface{})))
+		}
 	}
-	return fmt.Sprintf("%s", scField.Value)
+
+	return model
 }
 
-func GetScField(field interface{}) model.ScField {
-	fmt.Println("GetScField")
-	fmt.Println(field)
+func getSafeString(field interface{}) string {
 	if field == nil {
-		fmt.Println("GetScField: nil")
-		return model.ScField{}
+		fmt.Println("GetSafeString: nil")
+		return ""
 	}
-	fmt.Println("field is: [" + reflect.TypeOf(field).String() + "]")
-	scField, ok := field.(model.ScField)
-	fmt.Println(scField)
-	if !ok {
-		fmt.Println("GetScField: not a ScField")
-		return model.ScField{}
+	return field.(string)
+}
+
+func getStyles(field interface{}) []string {
+	if field == nil {
+		return []string{}
 	}
-	return scField
+	tmp := field.([]interface{})
+	var result = []string{}
+	for _, v := range tmp {
+		result = append(result, v.(string))
+	}
+
+	return result
+}
+
+func getNavigationTitle(field interface{}) string {
+	if field == nil {
+		return ""
+	}
+
+	return field.(map[string]interface{})["value"].(string)
 }
 
 func defaultNavigation(props model.PlaceholderComponent, model NavigationModel) templ.Component {
@@ -97,7 +111,7 @@ func defaultNavigation(props model.PlaceholderComponent, model NavigationModel) 
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(model.NavitaionTitle)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/navigation.templ`, Line: 66, Col: 104}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/navigation.templ`, Line: 80, Col: 104}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -124,7 +138,7 @@ func defaultNavigation(props model.PlaceholderComponent, model NavigationModel) 
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(child.NavitaionTitle)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/navigation.templ`, Line: 70, Col: 105}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/navigation.templ`, Line: 84, Col: 105}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {

@@ -16,7 +16,6 @@ func DecorateComponent(cssClass string, props model.PlaceholderComponent) string
 }
 
 func RenderRichText(field model.RichTextField) templ.Component {
-	fmt.Println("   --> RenderRichText")
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
 		_, err := io.WriteString(w, fmt.Sprintf("%s", field.Value))
 		return err
@@ -41,9 +40,6 @@ func GetRichTextField(fields interface{}, fieldName string) model.RichTextField 
 }
 
 func RenderLink(field model.LinkField) templ.Component {
-	fmt.Println("   --> RenderLink")
-	fmt.Println(field)
-
 	href := field.Href
 	if field.Querystring != "" {
 		href += "?" + field.Querystring
@@ -70,10 +66,7 @@ func RenderLink(field model.LinkField) templ.Component {
 }
 
 func GetLinkField(fields interface{}, fieldName string) model.LinkField {
-	fmt.Println("GetLinkField")
 	fieldMap, ok := fields.(map[string]interface{})
-	fmt.Println(fieldMap)
-	fmt.Println(fieldName)
 	if !ok {
 		fmt.Println("GetLinkField: not a map")
 		return model.LinkField{}
@@ -99,8 +92,6 @@ func GetLinkField(fields interface{}, fieldName string) model.LinkField {
 }
 
 func RenderImage(field model.ImageField) templ.Component {
-	fmt.Println("   --> RenderImage")
-
 	img := fmt.Sprintf("<img src=\"%s\"", field.Src)
 	img += AddIfNotEmpty("alt", field.Alt)
 	img += AddIfNotEmpty("width", field.Width)

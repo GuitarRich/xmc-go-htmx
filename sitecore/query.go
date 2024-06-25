@@ -3,7 +3,6 @@ package sitecore
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -20,8 +19,6 @@ func RunQuery(query string) map[string]interface{} {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Println("Running query")
 
 	client := &http.Client{
 		Timeout: time.Second * 10,
