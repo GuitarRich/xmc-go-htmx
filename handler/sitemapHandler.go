@@ -12,7 +12,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func HandleSitemap(c echo.Context) error {
+func (h *RequestPipelineHandler) HandleSitemap(c echo.Context) error {
 
 	siteName := sitecore.GetEnvVar("SITECORE_SITE_NAME")
 	itemPath := c.Request().URL.Path

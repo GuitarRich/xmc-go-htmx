@@ -43,3 +43,21 @@ func GetNotFoundPageQuery(siteName string, language string) string {
         }
     `, siteName, language)
 }
+
+func GetRedirectsForSiteQuery(siteName string) string {
+	return fmt.Sprintf(`
+        {
+            site { 
+                siteInfo(site: "%s") {
+                    name
+                    rootPath
+                    redirects {
+                        redirectType
+                        isQueryStringPreserved
+                        target
+                        pattern
+                    }
+                }
+            }
+        }`, siteName)
+}

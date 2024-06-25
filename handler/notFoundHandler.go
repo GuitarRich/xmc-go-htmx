@@ -3,15 +3,13 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 
 	"github.com/guitarrich/headless-go-htmx/model"
 	"github.com/guitarrich/headless-go-htmx/sitecore"
-	"github.com/guitarrich/headless-go-htmx/view/layout"
 	"github.com/labstack/echo/v4"
 )
 
-func HandleNotFound(c echo.Context) error {
+func (h *RequestPipelineHandler) HandleNotFound(c echo.Context) error {
 
 	fmt.Println("HandleNotFound")
 
@@ -26,7 +24,6 @@ func HandleNotFound(c echo.Context) error {
 	response := model.NotFoundPageResponse{}
 	json.Unmarshal(jsonString, &response)
 
-	fmt.Println("response: ", response)
 	/*
 		if response.Data.Site.SiteInfo.ErrorHandling.NotFoundPage.Rendered == nil {
 			// They have not set a not found page
@@ -34,9 +31,7 @@ func HandleNotFound(c echo.Context) error {
 		}
 	*/
 
-	fmt.Println("Updating dynamic placeholders...")
-	var tmp model.PlaceholderComponent
-	HandleDynamicPlaceholders(tmp, response.Data.Site.SiteInfo.ErrorHandling.NotFoundPage.Rendered.Sitecore.Route.Placeholders, 1)
+	h.renderedLayout = response.Data.Site.SiteInfo.ErrorHandling.NotFoundPage.Rendered
 
-	return render(c, http.StatusNotFound, layout.MainLayout(response.Data.Site.SiteInfo.ErrorHandling.NotFoundPage.Rendered.Sitecore.Route))
+	return nil
 }
