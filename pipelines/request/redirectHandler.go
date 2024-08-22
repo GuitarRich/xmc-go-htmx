@@ -1,11 +1,14 @@
-package handler
+package request
 
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"regexp"
 	"strings"
+	"time"
 
+	"github.com/allegro/bigcache"
 	"github.com/guitarrich/headless-go-htmx/model"
 	"github.com/guitarrich/headless-go-htmx/sitecore"
 	"github.com/labstack/echo/v4"
@@ -15,10 +18,20 @@ func (h *RequestPipelineHandler) HandleRedirects(c echo.Context) error {
 
 	fmt.Println("HandleRedirects")
 
-	query := sitecore.GetRedirectsForSiteQuery(h.siteName)
-	result := sitecore.RunQuery(query)
+	cache, _ := bigcache.NewBigCache(bigcache.DefaultConfig(100 * time.Minute))
 
-	jsonString, _ := json.Marshal(result)
+	fmt.Println(" -> Checking cache")
+	jsonString, err := cache.Get(fmt.Sprintf("redirects-%s", h.siteName))
+	if err != nil {
+		fmt.Println(" -> Cache miss")
+		query := sitecore.GetRedirectsForSiteQuery(h.siteName)
+		result := sitecore.RunQuery(query)
+
+		jsonString, _ = json.Marshal(result)
+		cache.Set(fmt.Sprintf("redirects-%s", h.siteName), jsonString)
+	} else {
+		fmt.Println(" -> Cache hit")
+	}
 
 	response := model.RedirectResponse{}
 	json.Unmarshal(jsonString, &response)
@@ -50,10 +63,10 @@ func (h *RequestPipelineHandler) HandleRedirects(c echo.Context) error {
 func getRedirectType(redirectType string) int {
 	switch redirectType {
 	case "REDIRECT_301":
-		return 301
+		return http.StatusMovedPermanently
 	case "REDIRECT_302":
-		return 302
+		return http.StatusFound
 	}
 
-	return 302
+	return http.StatusFound
 }

@@ -1,11 +1,23 @@
 package model
 
+type EditMode string
+
+const (
+	Chromes  EditMode = "chromes"
+	Metadata          = "metadata"
+)
+
+func (s EditMode) String() string {
+	return string(s)
+}
+
 type Placeholder struct {
 	Components []PlaceholderComponent `json:"components"`
 }
 
 type RichTextField struct {
-	Value interface{} `json:"value"`
+	Value    interface{} `json:"value"`
+	Editable string      `json:"editable"`
 }
 
 type ImageField struct {

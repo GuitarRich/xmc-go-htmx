@@ -1,4 +1,4 @@
-package handler
+package request
 
 import (
 	"encoding/json"
@@ -27,7 +27,6 @@ func (h *RequestPipelineHandler) HandleLayout(c echo.Context) error {
 		fmt.Println("NotFound")
 		h.NotFound = true
 		return nil
-		//		return HandleNotFound(c)
 	}
 
 	h.renderedLayout = layoutResponse.Data.Layout.Item.Rendered

@@ -1,0 +1,11 @@
+package editing
+
+import (
+	"github.com/guitarrich/headless-go-htmx/model"
+	"github.com/guitarrich/headless-go-htmx/view/components"
+)
+
+templ RichTextField(field model.RichTextField) {
+	<code type="text/sitecore" chrometype="rendering" kind="open" hintname="Rich Text" id={ field.ID } data-selectable="true" style="cursor: pointer;"></code>
+	@components
+}

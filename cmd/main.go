@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/guitarrich/headless-go-htmx/handler"
+	"github.com/guitarrich/headless-go-htmx/pipelines/request"
 	"github.com/guitarrich/headless-go-htmx/view/components"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -23,7 +23,7 @@ func main() {
 	app.Use(middleware.Logger())
 
 	components.RegisterComponents()
-	layoutHandler := handler.RequestPipelineHandler{}
+	layoutHandler := request.RequestPipelineHandler{}
 	app.GET("/*", layoutHandler.RequestBeginHandler)
 
 	s := &http2.Server{
