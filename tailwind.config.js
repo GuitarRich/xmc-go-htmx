@@ -7,6 +7,10 @@ module.exports = {
       variants: ["sm", "md", "lg", "xl", "2xl"],
     },
     {
+      pattern: /bg-/,
+      variants: ["sm", "md", "lg", "xl", "2xl"],
+    },
+    {
       pattern: /static|fixed|relative|absolute/,
     },
   ],
