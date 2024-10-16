@@ -9,7 +9,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func (h *RequestPipelineHandler) HandleLayout(c echo.Context) error {
+func (h *RequestPipelineHandler) Run(c echo.Context) error {
 
 	fmt.Println("MainLayoutHandler")
 	fmt.Printf("Request: %s\n", c.Request().URL.Path)
@@ -21,6 +21,8 @@ func (h *RequestPipelineHandler) HandleLayout(c echo.Context) error {
 
 	layoutResponse := model.LayoutResponse{}
 	json.Unmarshal(jsonString, &layoutResponse)
+
+	sitecore.RendererLog("\n\n[LAYOUTRESPONSE]\n\n%s\n\n****\n", layoutResponse)
 
 	if layoutResponse.Data.Layout.Item.Rendered.Sitecore.Route.Placeholders == nil {
 		// This is a 404, so we need to render the 404 page

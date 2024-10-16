@@ -11,34 +11,65 @@ func (s EditMode) String() string {
 	return string(s)
 }
 
+type PageSate string
+
+const (
+	Preview PageSate = "preview"
+	Edit    PageSate = "edit"
+	Normal  PageSate = "normal"
+)
+
+type Datasource struct {
+	Id       string `json:"id"`
+	Language string `json:"language"`
+	Revision string `json:"revision"`
+	Version  string `json:"version"`
+}
+
+type MetadataData struct {
+	Datasource Datasource `json:"datasource"`
+	Title      string     `json:"title"`
+	FieldId    string     `json:"fieldId"`
+	FieldType  string     `json:"fieldType"`
+	RawValue   string     `json:"rawValue"`
+}
+
+func (s PageSate) String() string {
+	return string(s)
+}
+
 type Placeholder struct {
 	Components []PlaceholderComponent `json:"components"`
 }
 
 type RichTextField struct {
-	Value    interface{} `json:"value"`
-	Editable string      `json:"editable"`
+	Value    interface{}  `json:"value"`
+	Editable string       `json:"editable"`
+	Metadata MetadataData `json:"metadata"`
 }
 
 type ImageField struct {
-	Src    string `json:"src"`
-	Alt    string `json:"alt"`
-	Width  string `json:"width"`
-	Height string `json:"height"`
+	Src      string       `json:"src"`
+	Alt      string       `json:"alt"`
+	Width    string       `json:"width"`
+	Height   string       `json:"height"`
+	Metadata MetadataData `json:"metadata"`
 }
 
 type LinkField struct {
-	Href        string `json:"href"`
-	Anchor      string `json:"anchor"`
-	Querystring string `json:"querystring"`
-	Text        string `json:"text"`
-	Target      string `json:"target"`
-	Title       string `json:"title"`
-	Class       string `json:"class"`
+	Href        string       `json:"href"`
+	Anchor      string       `json:"anchor"`
+	Querystring string       `json:"querystring"`
+	Text        string       `json:"text"`
+	Target      string       `json:"target"`
+	Title       string       `json:"title"`
+	Class       string       `json:"class"`
+	Metadata    MetadataData `json:"metadata"`
 }
 
 type ScField struct {
-	Value interface{} `json:"value"`
+	Value    interface{}  `json:"value"`
+	Metadata MetadataData `json:"metadata"`
 }
 
 type PlaceholderComponent struct {

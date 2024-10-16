@@ -61,3 +61,34 @@ func GetRedirectsForSiteQuery(siteName string) string {
             }
         }`, siteName)
 }
+
+func GetEditingDataQuery(siteName string, itemId string, language string) string {
+	return `
+ query EditingQuery(
+    $siteName: String!
+    $itemId: String!
+    $language: String!
+    $version: String
+    $after: String
+    $pageSize: Int = ${PAGE_SIZE}
+) {
+    item(path: $itemId, language: $language, version: $version) {
+      rendered
+    }
+    site {
+      siteInfo(site: $siteName) {
+        dictionary(language: $language, first: $pageSize, after: $after) {
+          results {
+            key
+            value
+          }
+          pageInfo {
+            endCursor
+            hasNext
+          }
+        }
+      }
+    }
+  }
+`
+}

@@ -30,8 +30,8 @@ func (h RequestPipelineHandler) RequestBeginHandler(c echo.Context) error {
 		return h.HandleSitemap(c)
 	}
 
-	// Handle cathall paths
-	_ = h.HandleLayout(c)
+	// Handle catchall paths
+	_ = h.Run(c)
 	if h.NotFound {
 		// Check for redirects
 		_ = h.HandleRedirects(c)

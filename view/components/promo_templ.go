@@ -17,7 +17,7 @@ import (
 )
 
 func Promo(data model.PlaceholderComponent) templ.Component {
-	fmt.Println("PromoComponent", data.Params.FieldNames)
+	sitecore.RendererLog("PromoComponent [%s]\n", data.Params.FieldNames)
 	switch data.Params.FieldNames {
 	case "WithText":
 		return promoWithText(data)
@@ -42,7 +42,7 @@ func promoDefault(data model.PlaceholderComponent) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(Log("PromoComponent"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/promo.templ`, Line: 20, Col: 24}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/promo.templ`, Line: 20, Col: 23}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -117,7 +117,7 @@ func promoWithText(data model.PlaceholderComponent) templ.Component {
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(Log("WithTextComponent"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/promo.templ`, Line: 37, Col: 27}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/promo.templ`, Line: 37, Col: 26}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {

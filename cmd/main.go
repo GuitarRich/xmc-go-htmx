@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/guitarrich/headless-go-htmx/middleware/editing"
 	"github.com/guitarrich/headless-go-htmx/pipelines/request"
 	"github.com/guitarrich/headless-go-htmx/view/components"
 	"github.com/labstack/echo/v4"
@@ -25,6 +26,11 @@ func main() {
 	components.RegisterComponents()
 	layoutHandler := request.RequestPipelineHandler{}
 	app.GET("/*", layoutHandler.RequestBeginHandler)
+
+	// Editing API
+	editingHandler := editing.EditingRequestHandler{}
+	app.GET("/api/editing/config", editingHandler.Config)
+	app.GET("/api/editing/render", editingHandler.Render)
 
 	s := &http2.Server{
 		MaxConcurrentStreams: 250,

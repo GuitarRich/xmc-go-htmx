@@ -13,6 +13,7 @@ import "bytes"
 import (
 	"fmt"
 	"github.com/guitarrich/headless-go-htmx/model"
+	"github.com/guitarrich/headless-go-htmx/sitecore"
 )
 
 func RenderPlaceholder(placeholderKey string, placeholders map[string][]model.PlaceholderComponent) templ.Component {
@@ -31,7 +32,7 @@ func RenderPlaceholder(placeholderKey string, placeholders map[string][]model.Pl
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(Log("PlacholderComponent"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/placeholder.templ`, Line: 9, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/placeholder.templ`, Line: 10, Col: 28}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -44,7 +45,7 @@ func RenderPlaceholder(placeholderKey string, placeholders map[string][]model.Pl
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(Log("Rendering placeholder: " + placeholderKey))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/placeholder.templ`, Line: 11, Col: 51}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/placeholder.templ`, Line: 12, Col: 53}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -88,6 +89,6 @@ func RenderPlaceholder(placeholderKey string, placeholders map[string][]model.Pl
 }
 
 func Log(message string) string {
-	fmt.Println(message)
+	sitecore.RendererLog(message)
 	return ""
 }

@@ -1,0 +1,13 @@
+package sitecore
+
+import (
+"github.com/guitarrich/headless-go-htmx/model"
+)
+
+templ RenderFieldMetadata(metadata model.MetadataData, field templ.Component) {
+if metadata.FieldId != "" {
+<div>Editable Field</div>
+} else {
+<div>Normal Field</div>
+}
+}

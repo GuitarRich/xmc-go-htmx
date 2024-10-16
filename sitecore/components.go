@@ -15,11 +15,26 @@ func DecorateComponent(cssClass string, props model.PlaceholderComponent) string
 	return fmt.Sprintf("%s %s %s", cssClass, props.Params.GridParameters, props.Params.Styles)
 }
 
+func renderFieldMetadata(metadata model.MetadataData, field templ.Component) templ.Component {
+	RendererLog("metadata: %s\n", metadata)
+	if metadata.FieldId != "" {
+		fieldMetadata := templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
+			return RenderFieldMetadata(metadata, field).Render(ctx, w)
+		})
+		return fieldMetadata
+	}
+
+	return field
+}
+
 func RenderRichText(field model.RichTextField) templ.Component {
-	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
+	RendererLog("metadata: %s\n", field.Metadata)
+	renderedField := templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
 		_, err := io.WriteString(w, fmt.Sprintf("%s", field.Value))
 		return err
 	})
+
+	return RenderFieldMetadata(field.Metadata, renderedField)
 }
 
 func GetRichTextField(fields interface{}, fieldName string) model.RichTextField {

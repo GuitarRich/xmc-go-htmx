@@ -5,6 +5,7 @@ import (
 
 	"github.com/a-h/templ"
 	"github.com/guitarrich/headless-go-htmx/model"
+	"github.com/guitarrich/headless-go-htmx/sitecore"
 )
 
 var components = map[string]interface{}{}
@@ -13,9 +14,12 @@ func RegisterComponent(componentName string, component func(model.PlaceholderCom
 	components[componentName] = component
 }
 
-func GetComponent(component model.PlaceholderComponent) templ.Component {
-	fmt.Printf("GetComponent [%s]\n", component.ComponentName)
+func GetComponents() map[string]interface{} {
+	return components
+}
 
+func GetComponent(component model.PlaceholderComponent) templ.Component {
+	sitecore.RendererLog("GetComponent [%s]\n", component.ComponentName)
 	if component.ComponentName == "" {
 		return templ.Raw("Component Name is empty")
 	}
