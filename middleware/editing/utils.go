@@ -82,6 +82,11 @@ func getSCHeader() string {
 }
 
 func GetEditScripts(data model.Rendered) string {
+
+	if !sitecore.IsEditMode(data.Sitecore.Context) {
+		return ""
+	}
+
 	var scripts strings.Builder
 
 	for _, script := range data.Sitecore.Context.ClientScripts {

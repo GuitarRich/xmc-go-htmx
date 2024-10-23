@@ -1,0 +1,15 @@
+package render
+
+import (
+	"fmt"
+
+	"github.com/guitarrich/headless-go-htmx/model"
+)
+
+templ RenderComponent(component model.PlaceholderComponent, sc model.SitecoreContext) {
+	@templ.Raw(fmt.Sprintf("<!-- Component: [%s] -->", component.ComponentName))
+	@templ.Raw(RenderComponentOpen(component, sc))
+	@GetComponent(component, sc)
+	@templ.Raw(RenderComponentClose(component, sc))
+	@templ.Raw(fmt.Sprintf("<!-- /Component: [%s] -->", component.ComponentName))
+}

@@ -15,11 +15,11 @@ import (
 	"github.com/guitarrich/headless-go-htmx/sitecore/render"
 )
 
-func RichText(props model.PlaceholderComponent) templ.Component {
-	return defaultVariant(props)
+func RichText(props model.PlaceholderComponent, sc model.SitecoreContext) templ.Component {
+	return defaultVariant(props, sc)
 }
 
-func defaultVariant(props model.PlaceholderComponent) templ.Component {
+func defaultVariant(props model.PlaceholderComponent, sc model.SitecoreContext) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {

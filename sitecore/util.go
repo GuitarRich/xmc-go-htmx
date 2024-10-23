@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/guitarrich/headless-go-htmx/model"
 	"github.com/joho/godotenv"
 )
 
@@ -28,4 +29,8 @@ func AddIfNotEmpty(name string, value string) string {
 		return fmt.Sprintf(" %s=\"%s\"", name, value)
 	}
 	return ""
+}
+
+func IsEditMode(data model.SitecoreContext) bool {
+	return data.EditMode == "edit"
 }

@@ -944,10 +944,6 @@ video {
   scroll-margin: 5rem;
 }
 
-.flex-row {
-  flex-direction: row;
-}
-
 .flex-wrap {
   flex-wrap: wrap;
 }

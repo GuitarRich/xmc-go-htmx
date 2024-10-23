@@ -5,11 +5,11 @@ import (
 	"github.com/guitarrich/headless-go-htmx/sitecore/render"
 )
 
-func Image(component model.PlaceholderComponent) templ.Component {
-	return defaultImageVariant(component)
+func Image(component model.PlaceholderComponent, sc model.SitecoreContext) templ.Component {
+	return defaultImageVariant(component, sc)
 }
 
-templ defaultImageVariant(component model.PlaceholderComponent) {
+templ defaultImageVariant(component model.PlaceholderComponent, sc model.SitecoreContext) {
 	<div class={ render.DecorateComponent("image", component) }>
 		@render.ImageField(component.Fields, "Image")
 	</div>

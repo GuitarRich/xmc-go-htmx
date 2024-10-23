@@ -26,7 +26,7 @@ type NavigationModel struct {
 	Children        []NavigationModel
 }
 
-func Navigation(props model.PlaceholderComponent) templ.Component {
+func Navigation(props model.PlaceholderComponent, sc model.SitecoreContext) templ.Component {
 	fields := props.Fields.([]interface{})[0].(map[string]interface{})
 
 	model := buildNavigationModel(fields)

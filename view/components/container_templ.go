@@ -16,7 +16,7 @@ import (
 	"github.com/guitarrich/headless-go-htmx/sitecore/render"
 )
 
-func Container(component model.PlaceholderComponent) templ.Component {
+func Container(component model.PlaceholderComponent, sc model.SitecoreContext) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -55,7 +55,7 @@ func Container(component model.PlaceholderComponent) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = RenderPlaceholderWithId("container-"+component.Params.DynamicPlaceholderID, component.Placeholders, component.UID).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = render.RenderPhWId("container-"+component.Params.DynamicPlaceholderID, component.Placeholders, component.UID, sc).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

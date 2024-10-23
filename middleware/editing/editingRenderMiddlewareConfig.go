@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/guitarrich/headless-go-htmx/view/components"
+	"github.com/guitarrich/headless-go-htmx/sitecore/render"
 	"github.com/labstack/echo/v4"
 )
 
@@ -34,20 +34,8 @@ func (h *EditingRequestHandler) Config(c echo.Context) error {
 	c.Response().Header().Set("Content-Security-Policy", getSCHeader())
 
 	packages := make(map[string]interface{})
-	packages["@sitecore/byoc"] = "0.2.15"
-	packages["@sitecore/components"] = "1.1.10"
-	packages["@sitecore-cloudsdk/core"] = "0.3.1"
-	packages["@sitecore-cloudsdk/events"] = "0.3.1"
-	packages["@sitecore-cloudsdk/personalize"] = "0.3.1"
-	packages["@sitecore-cloudsdk/utils"] = "0.3.1"
-	packages["@sitecore-feaas/clientside"] = "0.5.18"
-	packages["@sitecore-jss/sitecore-jss"] = "22.1.3"
-	packages["@sitecore-jss/sitecore-jss-cli"] = "22.1.3"
-	packages["@sitecore-jss/sitecore-jss-dev-tools"] = "22.1.3"
-	packages["@sitecore-jss/sitecore-jss-nextjs"] = "22.1.3"
-	packages["@sitecore-jss/sitecore-jss-react"] = "22.1.3"
 
-	componentList := components.GetComponents()
+	componentList := render.GetComponents()
 	keys := make([]string, 0, len(componentList))
 
 	for key := range componentList {

@@ -6,10 +6,10 @@ import (
 	"github.com/guitarrich/headless-go-htmx/sitecore/render"
 )
 
-templ Header(component model.PlaceholderComponent) {
+templ Header(component model.PlaceholderComponent, sc model.SitecoreContext) {
 	<div class={ render.DecorateComponent("component", component) }>
 		@templ.Raw(fmt.Sprintf("<!-- Placeholder: [%s] -->", "mainnav-container-"+component.Params.DynamicPlaceholderID))
-		@RenderPlaceholderWithId("mainnav-container-"+component.Params.DynamicPlaceholderID, component.Placeholders,
-			component.UID)
+		@render.RenderPhWId("mainnav-container-"+component.Params.DynamicPlaceholderID, component.Placeholders,
+			component.UID, sc)
 	</div>
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/guitarrich/headless-go-htmx/sitecore/render"
 )
 
-func Promo(data model.PlaceholderComponent) templ.Component {
+func Promo(data model.PlaceholderComponent, sc model.SitecoreContext) templ.Component {
 	sitecore.RendererLog("PromoComponent [%s]\n", data.Params.FieldNames)
 	switch data.Params.FieldNames {
 	case "WithText":

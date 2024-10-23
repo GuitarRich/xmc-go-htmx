@@ -5,7 +5,7 @@ import (
 	"github.com/guitarrich/headless-go-htmx/sitecore/render"
 )
 
-templ Hero(component model.PlaceholderComponent) {
+templ Hero(component model.PlaceholderComponent, sc model.SitecoreContext) {
 	<div
 		class={ render.DecorateComponent("component hero bg-white bg-[image:var(--image-url)] bg-cover bg-center",
 	component) }

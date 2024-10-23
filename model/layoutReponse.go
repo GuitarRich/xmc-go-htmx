@@ -105,32 +105,36 @@ type RouteData struct {
 }
 
 type Rendered struct {
-	Sitecore struct {
-		Context struct {
-			PageEditing bool `json:"pageEditing"`
-			Site        struct {
-				Name string `json:"name"`
-			} `json:"site"`
-			PageState  string `json:"pageState"`
-			EditMode   string `json:"editMode"`
-			Language   string `json:"language"`
-			ItemPath   string `json:"itemPath"`
-			ClientData struct {
-				HorizonCanvasState struct {
-					ItemId      string  `json:"itemId"`
-					ItemVersion float64 `json:"itemVersion"`
-					SiteName    string  `json:"siteName"`
-					Language    string  `json:"language"`
-					DeviceId    string  `json:"deviceId"`
-					PageMode    string  `json:"pageMode"`
-					Variant     string  `json:"variant"`
-				} `json:"hrz-canvas-state"`
-				HorizonCanvasVerificationToken string `json:"hrz-canvas-verification-token"`
-			} `json:"clientData"`
-			ClientScripts []string `json:"clientScripts"`
-		} `json:"context"`
-		Route RouteData `json:"route"`
-	} `json:"sitecore"`
+	Sitecore Sitecore `json:"sitecore"`
+}
+
+type Sitecore struct {
+	Context SitecoreContext `json:"context"`
+	Route   RouteData       `json:"route"`
+}
+
+type SitecoreContext struct {
+	PageEditing bool `json:"pageEditing"`
+	Site        struct {
+		Name string `json:"name"`
+	} `json:"site"`
+	PageState  string `json:"pageState"`
+	EditMode   string `json:"editMode"`
+	Language   string `json:"language"`
+	ItemPath   string `json:"itemPath"`
+	ClientData struct {
+		HorizonCanvasState struct {
+			ItemId      string  `json:"itemId"`
+			ItemVersion float64 `json:"itemVersion"`
+			SiteName    string  `json:"siteName"`
+			Language    string  `json:"language"`
+			DeviceId    string  `json:"deviceId"`
+			PageMode    string  `json:"pageMode"`
+			Variant     string  `json:"variant"`
+		} `json:"hrz-canvas-state"`
+		HorizonCanvasVerificationToken string `json:"hrz-canvas-verification-token"`
+	} `json:"clientData"`
+	ClientScripts []string `json:"clientScripts"`
 }
 
 type LayoutResponse struct {

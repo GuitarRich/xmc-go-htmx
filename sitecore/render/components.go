@@ -154,8 +154,8 @@ func GetImageField(fields interface{}, fieldName string) model.ImageField {
 	return imageField
 }
 
-func RenderPlaceholderOpen(placeholderKey string, id string) string {
-	isEditing := true
+func RenderPlaceholderOpen(placeholderKey string, id string, context model.SitecoreContext) string {
+	isEditing := sitecore.IsEditMode(context)
 	if id == "" {
 		id = "00000000-0000-0000-0000-000000000000"
 	}
@@ -170,8 +170,8 @@ func RenderPlaceholderOpen(placeholderKey string, id string) string {
 	return result.String()
 }
 
-func RenderPlaceholderClose(placeholderKey string) string {
-	isEditing := true
+func RenderPlaceholderClose(placeholderKey string, context model.SitecoreContext) string {
+	isEditing := sitecore.IsEditMode(context)
 	var result strings.Builder
 	if isEditing {
 		result.WriteString("<code type=\"text/sitecore\" chrometype=\"placeholder\" class=\"scpm\" kind=\"close\" style=\"cursor:pointer;\"></code>")
@@ -180,8 +180,8 @@ func RenderPlaceholderClose(placeholderKey string) string {
 	return result.String()
 }
 
-func RenderComponentOpen(component model.PlaceholderComponent) string {
-	isEditing := true
+func RenderComponentOpen(component model.PlaceholderComponent, context model.SitecoreContext) string {
+	isEditing := sitecore.IsEditMode(context)
 	var result strings.Builder
 	if isEditing {
 		result.WriteString("<code type=\"text/sitecore\" chrometype=\"rendering\" class=\"scpm\" kind=\"open\"")
@@ -193,8 +193,8 @@ func RenderComponentOpen(component model.PlaceholderComponent) string {
 	return result.String()
 }
 
-func RenderComponentClose(component model.PlaceholderComponent) string {
-	isEditing := true
+func RenderComponentClose(component model.PlaceholderComponent, context model.SitecoreContext) string {
+	isEditing := sitecore.IsEditMode(context)
 	var result strings.Builder
 	if isEditing {
 		result.WriteString("<code type=\"text/sitecore\" chrometype=\"rendering\" class=\"scpm\" kind=\"close\" style=\"cursor:pointer;\"></code>")

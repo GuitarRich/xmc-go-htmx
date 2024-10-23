@@ -12,7 +12,7 @@ import "bytes"
 
 import (
 	"github.com/guitarrich/headless-go-htmx/model"
-	"github.com/guitarrich/headless-go-htmx/view/components"
+	"github.com/guitarrich/headless-go-htmx/sitecore/render"
 )
 
 func MainLayout(data model.Rendered) templ.Component {
@@ -38,7 +38,7 @@ func MainLayout(data model.Rendered) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.RenderPlaceholder("headless-header", data.Sitecore.Route.Placeholders).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = render.RenderPlaceholder("headless-header", data.Sitecore.Route.Placeholders, data.Sitecore.Context).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -46,7 +46,7 @@ func MainLayout(data model.Rendered) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.RenderPlaceholder("headless-main", data.Sitecore.Route.Placeholders).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = render.RenderPlaceholder("headless-main", data.Sitecore.Route.Placeholders, data.Sitecore.Context).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -54,7 +54,7 @@ func MainLayout(data model.Rendered) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.RenderPlaceholder("headless-footer", data.Sitecore.Route.Placeholders).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = render.RenderPlaceholder("headless-footer", data.Sitecore.Route.Placeholders, data.Sitecore.Context).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

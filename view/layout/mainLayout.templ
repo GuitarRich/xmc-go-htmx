@@ -2,24 +2,24 @@ package layout
 
 import (
 	"github.com/guitarrich/headless-go-htmx/model"
-	"github.com/guitarrich/headless-go-htmx/view/components"
+	"github.com/guitarrich/headless-go-htmx/sitecore/render"
 )
 
 templ MainLayout(data model.Rendered) {
 	@Base(data) {
 		<header>
 			<div id="header">
-				@components.RenderPlaceholder("headless-header", data.Sitecore.Route.Placeholders)
+				@render.RenderPlaceholder("headless-header", data.Sitecore.Route.Placeholders, data.Sitecore.Context)
 			</div>
 		</header>
 		<main class="border-t border-scgray-76 bg-gradient-main">
 			<div id="main">
-				@components.RenderPlaceholder("headless-main", data.Sitecore.Route.Placeholders)
+				@render.RenderPlaceholder("headless-main", data.Sitecore.Route.Placeholders, data.Sitecore.Context)
 			</div>
 		</main>
 		<footer>
 			<div id="footer">
-				@components.RenderPlaceholder("headless-footer", data.Sitecore.Route.Placeholders)
+				@render.RenderPlaceholder("headless-footer", data.Sitecore.Route.Placeholders, data.Sitecore.Context)
 			</div>
 		</footer>
 	}

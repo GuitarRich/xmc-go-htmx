@@ -1,0 +1,12 @@
+package render
+
+import (
+	"github.com/guitarrich/headless-go-htmx/model"
+)
+
+templ RenderPartialDesignDynamicPlaceholder(
+	placeholderKey string,
+	props model.PlaceholderComponent,
+	sc model.SitecoreContext) {
+	@RenderPlaceholder(props.Params.Sig, props.Placeholders, sc)
+}
