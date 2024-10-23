@@ -1,0 +1,26 @@
+package render
+
+import (
+	"encoding/json"
+	"github.com/guitarrich/headless-go-htmx/model"
+)
+
+func getMetadata(metadata model.MetadataData) string {
+	jsonString, err_ := json.Marshal(metadata)
+	if err_ == nil {
+		return string(jsonString)
+	}
+	return ""
+}
+
+templ RenderFieldMetadata(metadata model.MetadataData, field templ.Component) {
+	if metadata.FieldId != "" {
+		<code type="text/sitecore" chrometype="field" class="scpm" kind="open">
+			@templ.Raw(getMetadata(metadata))
+		</code>
+		@field
+		<code type="text/sitecore" chrometype="field" class="scpm" kind="close"></code>
+	} else {
+		@field
+	}
+}

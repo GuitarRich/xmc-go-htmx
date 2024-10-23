@@ -3,13 +3,12 @@ package components
 import (
 	"fmt"
 	"github.com/guitarrich/headless-go-htmx/model"
-	"github.com/guitarrich/headless-go-htmx/sitecore"
+	"github.com/guitarrich/headless-go-htmx/sitecore/render"
 )
 
 templ Container(component model.PlaceholderComponent) {
-	{ Log("ContainerComponent") }
-	<div class={ sitecore.DecorateComponent("container w-full mx-auto sm:max-w-lg md:max-w-2xl lg:max-w-4xl", component) }>
+	<div class={ render.DecorateComponent("container w-full mx-auto sm:max-w-lg md:max-w-2xl lg:max-w-4xl", component) }>
 		@templ.Raw(fmt.Sprintf("<!-- Placeholder: [%s] -->", "container-"+component.Params.DynamicPlaceholderID))
-		@RenderPlaceholder("container-"+component.Params.DynamicPlaceholderID, component.Placeholders)
+		@RenderPlaceholderWithId("container-"+component.Params.DynamicPlaceholderID, component.Placeholders, component.UID)
 	</div>
 }

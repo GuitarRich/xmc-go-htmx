@@ -11,13 +11,11 @@ import "io"
 import "bytes"
 
 import (
-	"fmt"
 	"github.com/guitarrich/headless-go-htmx/model"
-	"github.com/guitarrich/headless-go-htmx/sitecore"
+	"github.com/guitarrich/headless-go-htmx/sitecore/render"
 )
 
 func Image(component model.PlaceholderComponent) templ.Component {
-	fmt.Println("ImageComponent")
 	return defaultImageVariant(component)
 }
 
@@ -34,7 +32,7 @@ func defaultImageVariant(component model.PlaceholderComponent) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		var templ_7745c5c3_Var2 = []any{sitecore.DecorateComponent("image", component)}
+		var templ_7745c5c3_Var2 = []any{render.DecorateComponent("image", component)}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var2...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -56,7 +54,7 @@ func defaultImageVariant(component model.PlaceholderComponent) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = sitecore.RenderImage(sitecore.GetImageField(component.Fields, "Image")).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = render.ImageField(component.Fields, "Image").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -1,0 +1,15 @@
+package components
+
+import (
+	"fmt"
+	"github.com/guitarrich/headless-go-htmx/model"
+	"github.com/guitarrich/headless-go-htmx/sitecore/render"
+)
+
+templ Header(component model.PlaceholderComponent) {
+	<div class={ render.DecorateComponent("component", component) }>
+		@templ.Raw(fmt.Sprintf("<!-- Placeholder: [%s] -->", "mainnav-container-"+component.Params.DynamicPlaceholderID))
+		@RenderPlaceholderWithId("mainnav-container-"+component.Params.DynamicPlaceholderID, component.Placeholders,
+			component.UID)
+	</div>
+}

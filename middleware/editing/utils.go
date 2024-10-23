@@ -1,12 +1,14 @@
 package editing
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"regexp"
 	"slices"
 	"strings"
 
+	"github.com/guitarrich/headless-go-htmx/model"
 	"github.com/guitarrich/headless-go-htmx/sitecore"
 	"github.com/labstack/echo/v4"
 )
@@ -77,4 +79,23 @@ func getSCHeader() string {
 	var envOrigins = strings.Join(getAllowedOriginsFromEnv(), " ")
 	var editingOrigins = strings.Join(EDITING_ALLOWED_ORIGINS, ", ")
 	return fmt.Sprintf("frame-ancestors 'self' %s %s", envOrigins, editingOrigins)
+}
+
+func GetEditScripts(data model.Rendered) string {
+	var scripts strings.Builder
+
+	for _, script := range data.Sitecore.Context.ClientScripts {
+		scripts.WriteString(fmt.Sprintf("<script src=\"%s\"></script>", script))
+	}
+
+	if data.Sitecore.Context.ClientData.HorizonCanvasState.ItemId != "" {
+		jsonString, err_ := json.Marshal(data.Sitecore.Context.ClientData.HorizonCanvasState)
+		if err_ == nil {
+			scripts.WriteString("<script id=\"hrz-canvas-state\" type=\"application/json\">")
+			scripts.WriteString(string(jsonString))
+			scripts.WriteString("</script>")
+		}
+	}
+
+	return scripts.String()
 }

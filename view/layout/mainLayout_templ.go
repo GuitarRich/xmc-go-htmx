@@ -15,7 +15,7 @@ import (
 	"github.com/guitarrich/headless-go-htmx/view/components"
 )
 
-func MainLayout(data model.RouteData) templ.Component {
+func MainLayout(data model.Rendered) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -34,31 +34,31 @@ func MainLayout(data model.RouteData) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<header class=\"w-full flex flex-wrap relative\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<header><div id=\"header\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.RenderPlaceholder("headless-header", data.Placeholders).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.RenderPlaceholder("headless-header", data.Sitecore.Route.Placeholders).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</header><main class=\"w-full flex flex-wrap relative\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></header><main class=\"border-t border-scgray-76 bg-gradient-main\"><div id=\"main\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.RenderPlaceholder("headless-main", data.Placeholders).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.RenderPlaceholder("headless-main", data.Sitecore.Route.Placeholders).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</main><footer class=\"w-full flex flex-wrap relative bg-gray-800 text-white pt-8\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></main><footer><div id=\"footer\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = components.RenderPlaceholder("headless-footer", data.Placeholders).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = components.RenderPlaceholder("headless-footer", data.Sitecore.Route.Placeholders).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</footer>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></footer>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

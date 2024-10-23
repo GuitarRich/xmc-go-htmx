@@ -38,7 +38,6 @@ func main() {
 		IdleTimeout:          10 * time.Second,
 	}
 
-	//app.Start(":42069")
 	if err := app.StartH2CServer(":42069", s); err != http.ErrServerClosed {
 		log.Fatal(err)
 	}

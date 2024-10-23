@@ -1,0 +1,39 @@
+package components
+
+import (
+	"github.com/guitarrich/headless-go-htmx/model"
+	"github.com/guitarrich/headless-go-htmx/sitecore/render"
+)
+
+templ Hero(component model.PlaceholderComponent) {
+	<div
+		class={ render.DecorateComponent("component hero bg-white bg-[image:var(--image-url)] bg-cover bg-center",
+	component) }
+	>
+		<div aria-hidden="true" class="flex absolute -top-96 start-1/2 transform -translate-x-1/2">
+			<div
+				class="bg-gradient-to-r opacity-50 blur-3xl w-[90rem] h-[70rem] rounded-full origin-top-left -rotate-12 -translate-x-[15rem] from-transparent via-scblack to-transparent"
+			></div>
+		</div>
+		<div class="relative z-10">
+			<div class="container max-w-full w-full py-10 lg:py-16">
+				<div class="max-w-2xl text-center mx-auto text-scwhite">
+					<div class="">
+						@render.RichTextField(component.Fields, "HeroTagLine")
+					</div>
+					<div class="mt-5 max-w-2xl">
+						<h1 class="scroll-m-20 text-5xl font-normal tracking-wider lg:text-5xl">
+							@render.RichTextField(component.Fields, "HeroTitle")
+						</h1>
+					</div>
+					<div class="mt-5 max-w-3xl">
+						<div class="text-xl text-scgray-90">
+							@render.RichTextField(component.Fields, "HeroText")
+						</div>
+					</div>
+					<div class="mt-8 gap-3 flex justify-center"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+}

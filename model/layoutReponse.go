@@ -20,10 +20,10 @@ const (
 )
 
 type Datasource struct {
-	Id       string `json:"id"`
-	Language string `json:"language"`
-	Revision string `json:"revision"`
-	Version  string `json:"version"`
+	Id       string  `json:"id"`
+	Language string  `json:"language"`
+	Revision string  `json:"revision"`
+	Version  float64 `json:"version"`
 }
 
 type MetadataData struct {
@@ -44,15 +44,16 @@ type Placeholder struct {
 
 type RichTextField struct {
 	Value    interface{}  `json:"value"`
-	Editable string       `json:"editable"`
 	Metadata MetadataData `json:"metadata"`
 }
 
 type ImageField struct {
-	Src      string       `json:"src"`
-	Alt      string       `json:"alt"`
-	Width    string       `json:"width"`
-	Height   string       `json:"height"`
+	Value struct {
+		Src    string `json:"src"`
+		Alt    string `json:"alt"`
+		Width  string `json:"width"`
+		Height string `json:"height"`
+	}
 	Metadata MetadataData `json:"metadata"`
 }
 
@@ -110,10 +111,23 @@ type Rendered struct {
 			Site        struct {
 				Name string `json:"name"`
 			} `json:"site"`
-			PageState string `json:"pageState"`
-			EditMode  string `json:"editMode"`
-			Language  string `json:"language"`
-			ItemPath  string `json:"itemPath"`
+			PageState  string `json:"pageState"`
+			EditMode   string `json:"editMode"`
+			Language   string `json:"language"`
+			ItemPath   string `json:"itemPath"`
+			ClientData struct {
+				HorizonCanvasState struct {
+					ItemId      string  `json:"itemId"`
+					ItemVersion float64 `json:"itemVersion"`
+					SiteName    string  `json:"siteName"`
+					Language    string  `json:"language"`
+					DeviceId    string  `json:"deviceId"`
+					PageMode    string  `json:"pageMode"`
+					Variant     string  `json:"variant"`
+				} `json:"hrz-canvas-state"`
+				HorizonCanvasVerificationToken string `json:"hrz-canvas-verification-token"`
+			} `json:"clientData"`
+			ClientScripts []string `json:"clientScripts"`
 		} `json:"context"`
 		Route RouteData `json:"route"`
 	} `json:"sitecore"`
@@ -126,6 +140,14 @@ type LayoutResponse struct {
 				Rendered Rendered `json:"rendered"`
 			} `json:"item"`
 		} `json:"layout"`
+	} `json:"data"`
+}
+
+type EditingResponse struct {
+	Data struct {
+		Item struct {
+			Rendered Rendered `json:"rendered"`
+		} `json:"item"`
 	} `json:"data"`
 }
 

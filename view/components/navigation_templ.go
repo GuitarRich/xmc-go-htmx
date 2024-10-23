@@ -12,20 +12,21 @@ import "bytes"
 
 import (
 	"fmt"
+
 	"github.com/guitarrich/headless-go-htmx/model"
+	"github.com/guitarrich/headless-go-htmx/sitecore/render"
 )
 
 type NavigationModel struct {
-	Id             string
-	Styles         []string
-	Href           string
-	Querystring    string
-	NavitaionTitle string
-	Children       []NavigationModel
+	Id              string
+	Styles          []string
+	Href            string
+	Querystring     string
+	NavigationTitle string
+	Children        []NavigationModel
 }
 
 func Navigation(props model.PlaceholderComponent) templ.Component {
-	fmt.Println("Navigation[" + props.ComponentName + "]")
 	fields := props.Fields.([]interface{})[0].(map[string]interface{})
 
 	model := buildNavigationModel(fields)
@@ -40,7 +41,7 @@ func buildNavigationModel(fields map[string]interface{}) NavigationModel {
 	model.Href = getSafeString(fields["Href"])
 	model.Styles = getStyles(fields["Styles"])
 	model.Querystring = getSafeString(fields["Querystring"])
-	model.NavitaionTitle = getNavigationTitle(fields["NavigationTitle"])
+	model.NavigationTitle = getNavigationTitle(fields["NavigationTitle"])
 	model.Children = []NavigationModel{}
 
 	if fields["Children"] != nil {
@@ -95,61 +96,57 @@ func defaultNavigation(props model.PlaceholderComponent, model NavigationModel) 
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<nav class=\"w-full flex flex-wrap relative bg-gray-800 text-white\"><div class=\"w-full flex flex-wrap relative\"><ul class=\"w-full flex flex-wrap relative\"><li class=\"w-full flex flex-wrap relative\"><a href=\"")
+		var templ_7745c5c3_Var2 = []any{render.DecorateComponent("component navigation", props)}
+		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var2...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var2 templ.SafeURL = templ.SafeURL(model.Href)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var2)))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"w-full flex flex-wrap relative\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(model.NavitaionTitle)
+		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var2).String())
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/navigation.templ`, Line: 80, Col: 104}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/navigation.templ`, Line: 1, Col: 0}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a></li>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"bg-scwhite md:bg-gradient-sc bg-xl text-scwhite\"><nav class=\"w-full shadow-md\"><div><div class=\"hidden md:block\"><div class=\"mx-auto flex max-w-[1004px] justify-between p-4\"></div><div class=\"bg-scwhite text-scblack\"><div class=\"item-center relative mx-auto box-border flex w-[1004px] max-w-full flex-wrap justify-start px-5\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		for _, child := range model.Children {
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li class=\"w-full flex flex-wrap relative\"><a href=\"")
+		for _, item := range model.Children {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<a href=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var4 templ.SafeURL = templ.SafeURL(child.Href)
+			var templ_7745c5c3_Var4 templ.SafeURL = templ.URL(item.Href)
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var4)))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"w-full flex flex-wrap relative\">")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" class=\"flex flex-auto\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var5 string
-			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(child.NavitaionTitle)
+			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(item.NavigationTitle)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/navigation.templ`, Line: 84, Col: 105}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/navigation.templ`, Line: 89, Col: 32}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a></li>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</a>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</ul></div></nav>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div></div></nav></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

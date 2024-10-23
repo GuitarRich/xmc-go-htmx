@@ -6,5 +6,8 @@
     "scripts": {
         "build": "tailwindcss build -i ./css/tailwind.css -o css/main.css",
         "watch": "tailwindcss build -i ./css/tailwind.css -o css/main.css --watch"
+    },
+    "dependencies": {
+        "tailwindcss-animate": "^1.0.7"
     }
 }

@@ -82,7 +82,7 @@ func (h *EditingRequestHandler) Render(c echo.Context) error {
 	previewData.Version = c.Request().URL.Query().Get("sc_version")
 	previewData.LayoutKind = c.Request().URL.Query().Get("sc_layoutkind")
 
-	routePath := c.Request().URL.Query().Get("route")
+	routePath := fmt.Sprintf("%s?%s", c.Request().URL.Query().Get("route"), c.Request().URL.RawQuery)
 
 	sitecore.EditingLog(
 		"ediitng render middleware end in %dms: redirect %s",

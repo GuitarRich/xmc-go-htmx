@@ -11,13 +11,11 @@ import "io"
 import "bytes"
 
 import (
-	"fmt"
 	"github.com/guitarrich/headless-go-htmx/model"
-	"github.com/guitarrich/headless-go-htmx/sitecore"
+	"github.com/guitarrich/headless-go-htmx/sitecore/render"
 )
 
 func RichText(props model.PlaceholderComponent) templ.Component {
-	fmt.Println("RichTextComponent")
 	return defaultVariant(props)
 }
 
@@ -34,7 +32,7 @@ func defaultVariant(props model.PlaceholderComponent) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		var templ_7745c5c3_Var2 = []any{sitecore.DecorateComponent("component rich-text text-base leading-6 min-h-8 px-8 pb-4", props)}
+		var templ_7745c5c3_Var2 = []any{render.DecorateComponent("component rich-text text-base leading-6 min-h-8 px-8 pb-4", props)}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var2...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -56,7 +54,7 @@ func defaultVariant(props model.PlaceholderComponent) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = sitecore.RenderRichText(sitecore.GetRichTextField(props.Fields, "Text")).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = render.RichTextField(props.Fields, "Text").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

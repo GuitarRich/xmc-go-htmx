@@ -2,9 +2,10 @@ package sitecore
 
 import (
 	"fmt"
-	"github.com/joho/godotenv"
 	"log"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
 func GetEnvVar(key string) string {
@@ -15,7 +16,7 @@ func GetEnvVar(key string) string {
 	return os.Getenv(key)
 }
 
-func getSafeString(field interface{}) string {
+func GetSafeString(field interface{}) string {
 	if field == nil {
 		return ""
 	}

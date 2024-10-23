@@ -10,9 +10,17 @@ import (
 )
 
 func RunQuery(query string) map[string]interface{} {
+	var headers map[string]string
+	var params map[string]string
+	return RunQueryWithParameters(query, "", headers, params)
+}
 
-	jsonMapInstance := map[string]string{
-		"query": query,
+func RunQueryWithParameters(query string, queryName string, headers map[string]string, params map[string]string) map[string]interface{} {
+
+	jsonMapInstance := map[string]interface{}{
+		"query":         query,
+		"operationName": queryName,
+		"variables":     params,
 	}
 
 	jsonData, err := json.Marshal(jsonMapInstance)
@@ -27,6 +35,10 @@ func RunQuery(query string) map[string]interface{} {
 	req, err := http.NewRequest("POST", GetEnvVar("GRAPHQL_ENDPOINT"), bytes.NewBuffer(jsonData))
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("sc_apikey", GetEnvVar("SITECORE_API_KEY"))
+
+	for key, value := range headers {
+		req.Header.Set(key, value)
+	}
 
 	resp, err := client.Do(req)
 	if err != nil {

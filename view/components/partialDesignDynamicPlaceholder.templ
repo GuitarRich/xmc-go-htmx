@@ -5,6 +5,5 @@ import (
 )
 
 templ RenderPartialDesignDynamicPlaceholder(placeholderKey string, props model.PlaceholderComponent) {
-	{ Log("PartialDesignDynamicPlaceholderComponent") }
 	@RenderPlaceholder(props.Params.Sig, props.Placeholders)
 }

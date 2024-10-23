@@ -16,7 +16,7 @@ import (
 	"github.com/guitarrich/headless-go-htmx/sitecore/render"
 )
 
-func Container(component model.PlaceholderComponent) templ.Component {
+func Header(component model.PlaceholderComponent) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -29,7 +29,7 @@ func Container(component model.PlaceholderComponent) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		var templ_7745c5c3_Var2 = []any{render.DecorateComponent("container w-full mx-auto sm:max-w-lg md:max-w-2xl lg:max-w-4xl", component)}
+		var templ_7745c5c3_Var2 = []any{render.DecorateComponent("component", component)}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var2...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -41,7 +41,7 @@ func Container(component model.PlaceholderComponent) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var2).String())
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/container.templ`, Line: 1, Col: 0}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/header.templ`, Line: 1, Col: 0}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -51,11 +51,12 @@ func Container(component model.PlaceholderComponent) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templ.Raw(fmt.Sprintf("<!-- Placeholder: [%s] -->", "container-"+component.Params.DynamicPlaceholderID)).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = templ.Raw(fmt.Sprintf("<!-- Placeholder: [%s] -->", "mainnav-container-"+component.Params.DynamicPlaceholderID)).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = RenderPlaceholderWithId("container-"+component.Params.DynamicPlaceholderID, component.Placeholders, component.UID).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = RenderPlaceholderWithId("mainnav-container-"+component.Params.DynamicPlaceholderID, component.Placeholders,
+			component.UID).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -6,7 +6,7 @@ import (
 
 func GetLayoutQuery(itemPath string, language string, siteName string) string {
 	return fmt.Sprintf(`
-        {
+        query LayoutQuery {
           layout(site: "%s", routePath: "%s", language: "%s") {
             item {
               rendered
@@ -18,7 +18,7 @@ func GetLayoutQuery(itemPath string, language string, siteName string) string {
 
 func GetSitemapQuery(siteName string) string {
 	return fmt.Sprintf(`
-        {
+        query {
             site {
                 siteInfo(site: "%s") {
                     sitemap
@@ -30,7 +30,7 @@ func GetSitemapQuery(siteName string) string {
 
 func GetNotFoundPageQuery(siteName string, language string) string {
 	return fmt.Sprintf(`
-        {
+        query {
             site {
                 siteInfo(site: "%s") {
                     errorHandling(language: "%s") {
@@ -46,7 +46,7 @@ func GetNotFoundPageQuery(siteName string, language string) string {
 
 func GetRedirectsForSiteQuery(siteName string) string {
 	return fmt.Sprintf(`
-        {
+        query {
             site { 
                 siteInfo(site: "%s") {
                     name
@@ -62,33 +62,25 @@ func GetRedirectsForSiteQuery(siteName string) string {
         }`, siteName)
 }
 
-func GetEditingDataQuery(siteName string, itemId string, language string) string {
+func GetEditingDataQuery() string {
 	return `
- query EditingQuery(
-    $siteName: String!
-    $itemId: String!
-    $language: String!
-    $version: String
-    $after: String
-    $pageSize: Int = ${PAGE_SIZE}
-) {
-    item(path: $itemId, language: $language, version: $version) {
-      rendered
-    }
-    site {
-      siteInfo(site: $siteName) {
-        dictionary(language: $language, first: $pageSize, after: $after) {
-          results {
-            key
-            value
-          }
-          pageInfo {
-            endCursor
-            hasNext
-          }
-        }
-      }
-    }
-  }
-`
+query EditingQuery($siteName: String!, $itemId: String!, $language: String!, $version: String, $after: String, $pageSize: Int = 10) {
+	item(path: $itemId, language: $language, version: $version) {
+	    rendered
+	}
+	site {
+	    siteInfo(site: $siteName) {
+	        dictionary(language: $language, first: $pageSize, after: $after) {
+	            results {
+					key
+	                value
+	            }
+	            pageInfo {
+	              endCursor
+	              hasNext
+	            }
+	        }
+	    }
+	}
+}`
 }

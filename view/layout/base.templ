@@ -1,26 +1,30 @@
 package layout
 
-import "time"
-import "fmt"
-import "github.com/guitarrich/headless-go-htmx/model"
-import "github.com/guitarrich/headless-go-htmx/sitecore"
+import (
+	"time"
+	"fmt"
+	"github.com/guitarrich/headless-go-htmx/model"
+	"github.com/guitarrich/headless-go-htmx/middleware/editing"
+	"github.com/guitarrich/headless-go-htmx/sitecore/render"
+)
 
-templ Base(data model.RouteData) {
+templ Base(data model.Rendered) {
 	<!DOCTYPE html>
 	<html>
 		<head>
-			<title>{ GetBrowserTitle(data) }</title>
+			<title>{ GetBrowserTitle(data.Sitecore.Route) }</title>
 			<meta charset="utf-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1"/>
 			<link rel="stylesheet" href={ fmt.Sprint("/css/main.css?v=", time.Now()) }/>
-			<link rel="preconnect" href="https://fonts.googleapis.com"/>
+			<link rel=" preconnect" href="https://fonts.googleapis.com"/>
 			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 			<link
 				href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
 				rel="stylesheet"
 			/>
+			@templ.Raw(editing.GetEditScripts(data))
 		</head>
-		<body>
+		<body class="font-primary">
 			<div id="app">
 				{ children... }
 			</div>
@@ -29,5 +33,5 @@ templ Base(data model.RouteData) {
 }
 
 func GetBrowserTitle(data model.RouteData) string {
-	return fmt.Sprintf("%s", sitecore.GetRichTextField(data.Fields, "Title").Value)
+	return fmt.Sprintf("%s", render.GetRichTextField(data.Fields, "Title").Value)
 }

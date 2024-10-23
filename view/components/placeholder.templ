@@ -1,25 +1,26 @@
 package components
 
 import (
-"fmt"
-"github.com/guitarrich/headless-go-htmx/model"
-"github.com/guitarrich/headless-go-htmx/sitecore"
+	"fmt"
+	"github.com/guitarrich/headless-go-htmx/model"
+	"github.com/guitarrich/headless-go-htmx/sitecore/render"
 )
 
 templ RenderPlaceholder(placeholderKey string, placeholders map[string][]model.PlaceholderComponent) {
-{ Log("PlacholderComponent") }
-<div class="flex flex-row flex-wrap w-full">
-    { Log("Rendering placeholder: " + placeholderKey) }
-    @templ.Raw(fmt.Sprintf("<!-- Placeholder: [%s] -->", placeholderKey))
-    for _, component := range placeholders[placeholderKey] {
-    @templ.Raw(fmt.Sprintf("<!-- Component: [%s] -->", component.ComponentName))
-    @GetComponent(component)
-    @templ.Raw(fmt.Sprintf("<!-- /Component: [%s] -->", component.ComponentName))
-    }
-</div>
+	@RenderPlaceholderWithId(placeholderKey, placeholders, "")
 }
 
-func Log(message string) string {
-sitecore.RendererLog(message)
-return ""
+templ RenderPlaceholderWithId(placeholderKey string, placeholders map[string][]model.PlaceholderComponent, id string) {
+	@templ.Raw(render.RenderPlaceholderOpen(placeholderKey, id))
+	<div class="flex flex-row flex-wrap w-full">
+		@templ.Raw(fmt.Sprintf("<!-- Placeholder: [%s] -->", placeholderKey))
+		for _, component := range placeholders[placeholderKey] {
+			@templ.Raw(fmt.Sprintf("<!-- Component: [%s] -->", component.ComponentName))
+			@templ.Raw(render.RenderComponentOpen(component))
+			@GetComponent(component)
+			@templ.Raw(render.RenderComponentClose(component))
+			@templ.Raw(fmt.Sprintf("<!-- /Component: [%s] -->", component.ComponentName))
+		}
+	</div>
+	@templ.Raw(render.RenderPlaceholderClose(placeholderKey))
 }

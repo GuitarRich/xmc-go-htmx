@@ -1,47 +1,46 @@
 package components
 
 import (
-"fmt"
-"github.com/guitarrich/headless-go-htmx/model"
-"github.com/guitarrich/headless-go-htmx/sitecore"
+	"fmt"
+	"github.com/guitarrich/headless-go-htmx/model"
+	"github.com/guitarrich/headless-go-htmx/sitecore"
+	"github.com/guitarrich/headless-go-htmx/sitecore/render"
 )
 
 func Promo(data model.PlaceholderComponent) templ.Component {
-sitecore.RendererLog("PromoComponent [%s]\n", data.Params.FieldNames)
-switch data.Params.FieldNames {
-case "WithText":
-return promoWithText(data)
-default:
-return promoDefault(data)
-}
+	sitecore.RendererLog("PromoComponent [%s]\n", data.Params.FieldNames)
+	switch data.Params.FieldNames {
+	case "WithText":
+		return promoWithText(data)
+	default:
+		return promoDefault(data)
+	}
 }
 
 templ promoDefault(data model.PlaceholderComponent) {
-{ Log("PromoComponent") }
-<div class={ "component promo " + data.Params.GridParameters + " " + data.Params.Styles }>
-    <div class="component-content">
-        <div class="field-promotext">
-            @sitecore.RenderRichText(sitecore.GetRichTextField(data.Fields, "PromoText"))
-        </div>
-        <div class="field-promolink">
-            @sitecore.RenderLink(sitecore.GetLinkField(data.Fields, "PromoLink"))
-        </div>
-        <div class="field-promoimage\">
-            @sitecore.RenderImage(sitecore.GetImageField(data.Fields, "PromoIcon"))
-        </div>
-    </div>
-</div>
+	<div class={ "component promo " + data.Params.GridParameters + " " + data.Params.Styles }>
+		<div class="component-content">
+			<div class="field-promotext">
+				@render.RichTextField(data.Fields, "PromoText")
+			</div>
+			<div class="field-promolink">
+				@render.LinkField(data.Fields, "PromoLink")
+			</div>
+			<div class="field-promoimage\">
+				@render.ImageField(data.Fields, "PromoIcon")
+			</div>
+		</div>
+	</div>
 }
 
 templ promoWithText(data model.PlaceholderComponent) {
-{ Log("WithTextComponent") }
-<div class={ "component withtext " + data.Params.GridParameters + " " + data.Params.Styles }>
-    @templ.Raw(fmt.Sprintf("<!-- WithText Component Data: %s -->", data))
-    <div class="component-content">
-        <div class="field-withtext">
-            <h2>WithText</h2>
-            @sitecore.RenderRichText(sitecore.GetRichTextField(data.Fields, "PromoText"))
-        </div>
-    </div>
-</div>
+	<div class={ "component withtext " + data.Params.GridParameters + " " + data.Params.Styles }>
+		@templ.Raw(fmt.Sprintf("<!-- WithText Component Data: %s -->", data))
+		<div class="component-content">
+			<div class="field-withtext">
+				<h2>WithText</h2>
+				@render.RichTextField(data.Fields, "PromoText")
+			</div>
+		</div>
+	</div>
 }

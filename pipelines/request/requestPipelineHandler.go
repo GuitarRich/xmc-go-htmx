@@ -43,6 +43,6 @@ func (h RequestPipelineHandler) RequestBeginHandler(c echo.Context) error {
 	var tmp model.PlaceholderComponent
 	HandleDynamicPlaceholders(tmp, h.renderedLayout.Sitecore.Route.Placeholders, 1)
 
-	response := render(c, http.StatusOK, layout.MainLayout(h.renderedLayout.Sitecore.Route))
+	response := render(c, http.StatusOK, layout.MainLayout(h.renderedLayout))
 	return response
 }

@@ -2,17 +2,15 @@ package components
 
 import (
 	"github.com/guitarrich/headless-go-htmx/model"
-	"github.com/guitarrich/headless-go-htmx/sitecore"
-	"fmt"
+	"github.com/guitarrich/headless-go-htmx/sitecore/render"
 )
 
 func RichText(props model.PlaceholderComponent) templ.Component {
-	fmt.Println("RichTextComponent")
 	return defaultVariant(props)
 }
 
 templ defaultVariant(props model.PlaceholderComponent) {
-	<div class={ sitecore.DecorateComponent("component rich-text text-base leading-6 min-h-8 px-8 pb-4", props) }>
-		@sitecore.RenderRichText(sitecore.GetRichTextField(props.Fields, "Text"))
+	<div class={ render.DecorateComponent("component rich-text text-base leading-6 min-h-8 px-8 pb-4", props) }>
+		@render.RichTextField(props.Fields, "Text")
 	</div>
 }

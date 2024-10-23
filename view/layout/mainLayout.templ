@@ -5,16 +5,22 @@ import (
 	"github.com/guitarrich/headless-go-htmx/view/components"
 )
 
-templ MainLayout(data model.RouteData) {
+templ MainLayout(data model.Rendered) {
 	@Base(data) {
-		<header class="w-full flex flex-wrap relative">
-			@components.RenderPlaceholder("headless-header", data.Placeholders)
+		<header>
+			<div id="header">
+				@components.RenderPlaceholder("headless-header", data.Sitecore.Route.Placeholders)
+			</div>
 		</header>
-		<main class="w-full flex flex-wrap relative">
-			@components.RenderPlaceholder("headless-main", data.Placeholders)
+		<main class="border-t border-scgray-76 bg-gradient-main">
+			<div id="main">
+				@components.RenderPlaceholder("headless-main", data.Sitecore.Route.Placeholders)
+			</div>
 		</main>
-		<footer class="w-full flex flex-wrap relative bg-gray-800 text-white pt-8">
-			@components.RenderPlaceholder("headless-footer", data.Placeholders)
+		<footer>
+			<div id="footer">
+				@components.RenderPlaceholder("headless-footer", data.Sitecore.Route.Placeholders)
+			</div>
 		</footer>
 	}
 }
