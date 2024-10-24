@@ -1,0 +1,25 @@
+package components
+
+import "fmt"
+import "github.com/guitarrich/headless-go-htmx/model"
+import "github.com/guitarrich/headless-go-htmx/sitecore/render"
+
+func Footer(props model.PlaceholderComponent, sc model.SitecoreContext) templ.Component {
+	footerPhKey := fmt.Sprintf("footer-container-%s", props.Params.DynamicPlaceholderID)
+	return defaultFooterComponent(props, sc, footerPhKey)
+}
+
+templ defaultFooterComponent(props model.PlaceholderComponent, sc model.SitecoreContext, phKey string) {
+	<div class={ render.DecorateComponent("component box-border w-full bg-scblack px-5 py-10 text-scwhite", props) }>
+		<div
+			className="mx-auto mb-10 max-w-[964px] border border-solid border-transparent border-b-white pb-3 pt-5 text-left text-xl uppercase tracking-tight"
+		>
+			<span>Connect with us</span>
+		</div>
+		<div className="mx-auto max-w-[1004px] px-5">
+			<div className="-ml-2.5 -mr-2.5 mb-14 flex flex-wrap">
+				@render.RenderPlaceholder(phKey, props.Placeholders, sc)
+			</div>
+		</div>
+	</div>
+}

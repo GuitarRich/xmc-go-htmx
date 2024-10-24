@@ -3,6 +3,8 @@ package components
 import "github.com/guitarrich/headless-go-htmx/sitecore/render"
 
 func RegisterComponents() {
+	render.RegisterComponent("CallToAction", CallToAction)
+	render.RegisterComponent("Footer", Footer)
 	render.RegisterComponent("Header", Header)
 	render.RegisterComponent("Hero", Hero)
 	render.RegisterComponent("Container", Container)

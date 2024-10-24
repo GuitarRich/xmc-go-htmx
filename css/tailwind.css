@@ -2,6 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --scpurple: #8629ff;
+    --scblue: #001070;
+    --scblack: #1e1c22;
+    --scgray: #746f7b;
+    --scwhite: #ffffff;
+    --scred: #ff1f38;
+    --scdeepred: #eb001a;
+    --scultraviolet: #4300ad;
+    --scpink: #fe7dff;
+    --scsky: #00aeff;
+    --scgray-46: #746f7b;
+    --scgray-76: #c1bdc7;
+    --scgray-84: #d6d3da;
+    --scgray-90: #e4e2e8;
+    --scgray-95: #f1f0f3;
+    --scgray-96: #f1f5f9;
+    --scgray-98: #f9f9fa;
+
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-scwhite text-foreground;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+}
+
 a[target='_blank']:after {
   content: '\1F5D7'
 }

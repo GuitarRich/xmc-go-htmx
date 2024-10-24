@@ -41,6 +41,8 @@ func buildNavigationModel(fields map[string]interface{}) NavigationModel {
 		}
 	}
 
+	fmt.Printf("NavigationModel: %+v\n", model)
+
 	return model
 }
 
@@ -79,17 +81,18 @@ templ defaultNavigation(props model.PlaceholderComponent, model NavigationModel)
 			<nav class="w-full shadow-md">
 				<div>
 					<div class="hidden md:block">
-						<div class="mx-auto flex max-w-[1004px] justify-between p-4"></div>
+						<div class="mx-auto flex max-w-[1004px] justify-between p-4">
+							<h2 class="flex flex-auto">Links Here</h2>
+							for _, item := range model.Children {
+								<a href={ templ.URL(item.Href) } class="flex flex-auto">
+									{ item.NavigationTitle }
+								</a>
+							}
+						</div>
 						<div class="bg-scwhite text-scblack">
 							<div
 								class="item-center relative mx-auto box-border flex w-[1004px] max-w-full flex-wrap justify-start px-5"
-							>
-								for _, item := range model.Children {
-									<a href={ templ.URL(item.Href) } class="flex flex-auto">
-										{ item.NavigationTitle }
-									</a>
-								}
-							</div>
+							></div>
 						</div>
 					</div>
 				</div>

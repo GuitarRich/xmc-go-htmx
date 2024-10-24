@@ -51,6 +51,8 @@ func buildNavigationModel(fields map[string]interface{}) NavigationModel {
 		}
 	}
 
+	fmt.Printf("NavigationModel: %+v\n", model)
+
 	return model
 }
 
@@ -114,7 +116,7 @@ func defaultNavigation(props model.PlaceholderComponent, model NavigationModel) 
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"bg-scwhite md:bg-gradient-sc bg-xl text-scwhite\"><nav class=\"w-full shadow-md\"><div><div class=\"hidden md:block\"><div class=\"mx-auto flex max-w-[1004px] justify-between p-4\"></div><div class=\"bg-scwhite text-scblack\"><div class=\"item-center relative mx-auto box-border flex w-[1004px] max-w-full flex-wrap justify-start px-5\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"bg-scwhite md:bg-gradient-sc bg-xl text-scwhite\"><nav class=\"w-full shadow-md\"><div><div class=\"hidden md:block\"><div class=\"mx-auto flex max-w-[1004px] justify-between p-4\"><h2 class=\"flex flex-auto\">Links Here</h2>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -135,7 +137,7 @@ func defaultNavigation(props model.PlaceholderComponent, model NavigationModel) 
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(item.NavigationTitle)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/navigation.templ`, Line: 89, Col: 32}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/navigation.templ`, Line: 88, Col: 31}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -146,7 +148,7 @@ func defaultNavigation(props model.PlaceholderComponent, model NavigationModel) 
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div></div></nav></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"bg-scwhite text-scblack\"><div class=\"item-center relative mx-auto box-border flex w-[1004px] max-w-full flex-wrap justify-start px-5\"></div></div></div></div></nav></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -1,0 +1,80 @@
+package components
+
+import (
+"github.com/guitarrich/headless-go-htmx/model"
+"github.com/guitarrich/headless-go-htmx/sitecore"
+"github.com/guitarrich/headless-go-htmx/sitecore/render"
+)
+
+func CallToAction(data model.PlaceholderComponent, sc model.SitecoreContext) templ.Component {
+sitecore.RendererLog("CallToAction [%s]\n", data.Params.FieldNames)
+switch data.Params.FieldNames {
+case "ImageLeft":
+return ctaImageLeft(data, sc)
+case "Card":
+return ctaCard(data, sc)
+default:
+return ctaDefault(data, sc)
+}
+}
+
+templ ctaDefault(props model.PlaceholderComponent, sc model.SitecoreContext) {
+<div class={ render.DecorateComponent("component calltoaction", props) }>
+    <div class="container py-24 lg:py-32">
+        <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
+            <div>
+                <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                    @render.RichTextField(props.Fields, "Title")
+                </h1>
+                <div class="mt-3 text-xl text-muted-foreground">
+                    @render.RichTextField(props.Fields, "BodyText")
+                </div>
+                <div class="mt-7 grid gap-3 w-full sm:inline-flex">
+                    <span>Buttons Here</span>
+                </div>
+            </div>
+            <div class="relative ms-4">
+                @render.ImageField(props.Fields, "CTAImage")
+            </div>
+        </div>
+    </div>
+</div>
+}
+
+templ ctaImageLeft(props model.PlaceholderComponent, sc model.SitecoreContext) {
+<div class={ render.DecorateComponent("component calltoaction", props) }>
+    <div class="container py-24 lg:py-32">
+        <div class="grid md:grid-cols-2 gap-4 md:gap-8 xl:gap-20 md:items-center">
+            <div class="relative ms-4">
+                @render.ImageField(props.Fields, "CTAImage")
+            </div>
+            <div>
+                <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+                    @render.RichTextField(props.Fields, "Title")
+                </h1>
+                <div class="mt-3 text-xl">
+                    @render.RichTextField(props.Fields, "BodyText")
+                </div>
+                <div class="mt-7 grid gap-3 w-full sm:inline-flex">
+                    <span>Buttons Here</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>}
+
+templ ctaCard(props model.PlaceholderComponent, sc model.SitecoreContext) {
+<div class={ render.DecorateComponent("component calltoaction", props) }>
+    <div class="flex flex-col h-full bg-scwhite rounded-xl shadow-md overflow-hidden border-2 border-scgray-76">
+        @render.ImageField(props.Fields, "CTAImage")
+        <div class="flex flex-col flex-grow p-6">
+            <h2 class="text-xl font-semibold mb-2">
+                @render.RichTextField(props.Fields, "Title")
+            </h2>
+            <div class="text-gray-600 text-base mb-4">
+                @render.RichTextField(props.Fields, "BodyText")
+            </div>
+        </div>
+    </div>
+</div>
+}

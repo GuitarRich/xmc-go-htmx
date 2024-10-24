@@ -446,6 +446,37 @@ video {
   display: none;
 }
 
+:root {
+  --scpurple: #8629ff;
+  --scblue: #001070;
+  --scblack: #1e1c22;
+  --scgray: #746f7b;
+  --scwhite: #ffffff;
+  --scred: #ff1f38;
+  --scdeepred: #eb001a;
+  --scultraviolet: #4300ad;
+  --scpink: #fe7dff;
+  --scsky: #00aeff;
+  --scgray-46: #746f7b;
+  --scgray-76: #c1bdc7;
+  --scgray-84: #d6d3da;
+  --scgray-90: #e4e2e8;
+  --scgray-95: #f1f0f3;
+  --scgray-96: #f1f5f9;
+  --scgray-98: #f9f9fa;
+  --radius: 0.5rem;
+}
+
+* {
+  border-color: var(--scpurple);
+}
+
+body {
+  background-color: var(--scwhite);
+  color: var(--scblack);
+  font-feature-settings: 'rlig' 1, 'calt' 1;
+}
+
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
@@ -601,8 +632,52 @@ video {
   margin-right: auto;
 }
 
+.-ml-2 {
+  margin-left: -0.5rem;
+}
+
+.-ml-2\.5 {
+  margin-left: -0.625rem;
+}
+
+.-mr-2 {
+  margin-right: -0.5rem;
+}
+
+.-mr-2\.5 {
+  margin-right: -0.625rem;
+}
+
+.mb-10 {
+  margin-bottom: 2.5rem;
+}
+
+.mb-14 {
+  margin-bottom: 3.5rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.ms-4 {
+  margin-inline-start: 1rem;
+}
+
+.mt-3 {
+  margin-top: 0.75rem;
+}
+
 .mt-5 {
   margin-top: 1.25rem;
+}
+
+.mt-7 {
+  margin-top: 1.75rem;
 }
 
 .mt-8 {
@@ -617,12 +692,20 @@ video {
   display: flex;
 }
 
+.grid {
+  display: grid;
+}
+
 .hidden {
   display: none;
 }
 
 .h-\[70rem\] {
   height: 70rem;
+}
+
+.h-full {
+  height: 100%;
 }
 
 .min-h-8 {
@@ -653,12 +736,20 @@ video {
   max-width: 1004px;
 }
 
+.max-w-\[964px\] {
+  max-width: 964px;
+}
+
 .max-w-full {
   max-width: 100%;
 }
 
 .flex-auto {
   flex: 1 1 auto;
+}
+
+.flex-grow {
+  flex-grow: 1;
 }
 
 .basis-0 {
@@ -944,6 +1035,10 @@ video {
   scroll-margin: 5rem;
 }
 
+.flex-col {
+  flex-direction: column;
+}
+
 .flex-wrap {
   flex-wrap: wrap;
 }
@@ -964,16 +1059,48 @@ video {
   gap: 0.75rem;
 }
 
+.gap-4 {
+  gap: 1rem;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
 .rounded-full {
   border-radius: 9999px;
+}
+
+.rounded-xl {
+  border-radius: calc(var(--radius) * 2);
+}
+
+.border {
+  border-width: 1px;
+}
+
+.border-2 {
+  border-width: 2px;
 }
 
 .border-t {
   border-top-width: 1px;
 }
 
+.border-solid {
+  border-style: solid;
+}
+
 .border-scgray-76 {
   border-color: var(--scgray-76);
+}
+
+.border-transparent {
+  border-color: transparent;
+}
+
+.border-b-white {
+  border-bottom-color: var(--scwhite);
 }
 
 .bg-accent {
@@ -7791,6 +7918,10 @@ video {
   padding: 1rem;
 }
 
+.p-6 {
+  padding: 1.5rem;
+}
+
 .px-5 {
   padding-left: 1.25rem;
   padding-right: 1.25rem;
@@ -7806,8 +7937,25 @@ video {
   padding-bottom: 2.5rem;
 }
 
+.py-24 {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+
+.pb-3 {
+  padding-bottom: 0.75rem;
+}
+
 .pb-4 {
   padding-bottom: 1rem;
+}
+
+.pt-5 {
+  padding-top: 1.25rem;
+}
+
+.text-left {
+  text-align: left;
 }
 
 .text-center {
@@ -7816,6 +7964,11 @@ video {
 
 .font-primary {
   font-family: DM Sans, sans-serif;
+}
+
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
 }
 
 .text-5xl {
@@ -7833,16 +7986,41 @@ video {
   line-height: 1.75rem;
 }
 
+.font-extrabold {
+  font-weight: 800;
+}
+
 .font-normal {
   font-weight: 400;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.uppercase {
+  text-transform: uppercase;
 }
 
 .leading-6 {
   line-height: 1.5rem;
 }
 
+.tracking-tight {
+  letter-spacing: -0.025em;
+}
+
 .tracking-wider {
   letter-spacing: 0.05em;
+}
+
+.text-gray-600 {
+  --tw-text-opacity: 1;
+  color: rgb(75 85 99 / var(--tw-text-opacity));
+}
+
+.text-muted-foreground {
+  color: var(--scgray-46);
 }
 
 .text-scblack {
@@ -7994,6 +8172,10 @@ a:hover {
 }
 
 @media (min-width: 481px) {
+  .sm\:inline-flex {
+    display: inline-flex;
+  }
+
   .sm\:max-w-lg {
     max-width: 32rem;
   }
@@ -15366,6 +15548,18 @@ a:hover {
 
   .md\:basis-px {
     flex-basis: 1px;
+  }
+
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .md\:items-center {
+    align-items: center;
+  }
+
+  .md\:gap-8 {
+    gap: 2rem;
   }
 
   .md\:bg-accent {
@@ -29279,6 +29473,11 @@ a:hover {
     padding-bottom: 4rem;
   }
 
+  .lg\:py-32 {
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+  }
+
   .lg\:text-5xl {
     font-size: 3rem;
     line-height: 1;
@@ -29600,6 +29799,10 @@ a:hover {
 
   .xl\:basis-px {
     flex-basis: 1px;
+  }
+
+  .xl\:gap-20 {
+    gap: 5rem;
   }
 
   .xl\:bg-accent {
