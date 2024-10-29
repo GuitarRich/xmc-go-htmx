@@ -78,7 +78,7 @@ func promoDefault(data model.PlaceholderComponent) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = render.ImageField(data.Fields, "PromoIcon").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = render.ImageField(data.Fields, "PromoIcon", "").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -132,7 +132,7 @@ func promoWithText(data model.PlaceholderComponent) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"component-content\"><div class=\"field-withtext\"><h2>WithText</h2>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"component-content\"><div class=\"field-withtext\"><h2>WithText</h2>\\")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

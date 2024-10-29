@@ -17,7 +17,6 @@ func DecorateComponent(cssClass string, props model.PlaceholderComponent) string
 }
 
 func renderFieldMetadata(metadata model.MetadataData, field templ.Component) templ.Component {
-	fmt.Printf("renderFieldMetadata: %T, %#v\n", metadata, metadata)
 	fieldMetadata := templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
 		return RenderFieldMetadata(metadata, field).Render(ctx, w)
 	})
@@ -25,10 +24,11 @@ func renderFieldMetadata(metadata model.MetadataData, field templ.Component) tem
 }
 
 func RichTextField(fields interface{}, fieldName string) templ.Component {
-	return renderRichText(GetRichTextField(fields, fieldName))
+	field, _ := GetRichTextField(fields, fieldName)
+	return RenderRichText(field)
 }
 
-func renderRichText(field model.RichTextField) templ.Component {
+func RenderRichText(field model.RichTextField) templ.Component {
 	renderedField := templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
 		_, err := io.WriteString(w, fmt.Sprintf("%s", field.Value))
 		return err
@@ -37,26 +37,40 @@ func renderRichText(field model.RichTextField) templ.Component {
 	return RenderFieldMetadata(field.Metadata, renderedField)
 }
 
-func GetRichTextField(fields interface{}, fieldName string) model.RichTextField {
+func GetFieldWithFallback(fields interface{}, fieldNames ...string) string {
+	var result model.RichTextField
+	var ok bool
+	for _, fieldName := range fieldNames {
+		fmt.Printf("\nGetting field [%s]", fieldName)
+		result, ok = GetRichTextField(fields, fieldName)
+		if ok {
+			return fmt.Sprintf("%s", result.Value)
+		}
+	}
+
+	return ""
+}
+
+func GetRichTextField(fields interface{}, fieldName string) (model.RichTextField, bool) {
 	fieldMap, ok := fields.(map[string]interface{})
 	if !ok {
 		fmt.Println("GetRichTextField: not a map")
-		return model.RichTextField{}
+		return model.RichTextField{}, false
 	}
 	baseField, ok := fieldMap[fieldName].(map[string]interface{})
 	if !ok {
 		fmt.Println("GetRichTextField: not a field")
-		return model.RichTextField{}
+		return model.RichTextField{}, false
 	}
 
 	var result model.RichTextField
 	err := mapstructure.Decode(baseField, &result)
 	if err != nil {
 		fmt.Printf("GetRichTextField: not a RichTextField, %s", err)
-		return model.RichTextField{}
+		return model.RichTextField{}, false
 	}
 
-	return result
+	return result, true
 }
 
 func LinkField(fields interface{}, fieldName string) templ.Component {
@@ -64,25 +78,30 @@ func LinkField(fields interface{}, fieldName string) templ.Component {
 	return renderFieldMetadata(field.Metadata, renderLink(field))
 }
 
+func LinkFieldHasLink(fields interface{}, fieldName string) bool {
+	field := GetLinkField(fields, fieldName)
+	return field.Value.Href != ""
+}
+
 func renderLink(field model.LinkField) templ.Component {
-	href := field.Href
-	if field.Querystring != "" {
-		href += "?" + field.Querystring
+	href := field.Value.Href
+	if field.Value.Querystring != "" {
+		href += "?" + field.Value.Querystring
 	}
-	if field.Anchor != "" {
-		href += "#" + field.Anchor
+	if field.Value.Anchor != "" {
+		href += "#" + field.Value.Anchor
 	}
 
 	link := fmt.Sprintf("<a  href=\"%s\"", href)
-	link += sitecore.AddIfNotEmpty("target", field.Target)
-	link += sitecore.AddIfNotEmpty("title", field.Title)
-	link += sitecore.AddIfNotEmpty("class", field.Class)
+	link += sitecore.AddIfNotEmpty("target", field.Value.Target)
+	link += sitecore.AddIfNotEmpty("title", field.Value.Title)
+	link += sitecore.AddIfNotEmpty("class", field.Value.Class)
 
-	if field.Target == "_blank" {
+	if field.Value.Target == "_blank" {
 		link += " rel=\"noopener noreferrer\""
 	}
 
-	link += fmt.Sprintf(">%s</a>", field.Text)
+	link += fmt.Sprintf(">%s</a>", field.Value.Text)
 
 	return templ.ComponentFunc(func(ctx context.Context, w io.Writer) error {
 		_, err := io.WriteString(w, link)
@@ -114,16 +133,20 @@ func GetLinkField(fields interface{}, fieldName string) model.LinkField {
 	return result
 }
 
-func ImageField(fields interface{}, fieldName string) templ.Component {
+func ImageField(fields interface{}, fieldName string, cssClass string) templ.Component {
 	field := GetImageField(fields, fieldName)
-	return renderFieldMetadata(field.Metadata, renderImage(field))
+	return renderFieldMetadata(field.Metadata, renderImage(field, cssClass))
 }
 
-func renderImage(field model.ImageField) templ.Component {
+func renderImage(field model.ImageField, cssClass string) templ.Component {
 	img := fmt.Sprintf("<img src=\"%s\"", field.Value.Src)
 	img += sitecore.AddIfNotEmpty("alt", field.Value.Alt)
 	img += sitecore.AddIfNotEmpty("width", field.Value.Width)
 	img += sitecore.AddIfNotEmpty("height", field.Value.Height)
+
+	if cssClass != "" {
+		img += fmt.Sprintf(" class=\"%s\"", cssClass)
+	}
 
 	img += fmt.Sprintf(" />")
 

@@ -7,8 +7,13 @@ import (
 )
 
 templ Container(component model.PlaceholderComponent, sc model.SitecoreContext) {
-	<div class={ render.DecorateComponent("container w-full mx-auto sm:max-w-lg md:max-w-2xl lg:max-w-4xl", component) }>
-		@templ.Raw(fmt.Sprintf("<!-- Placeholder: [%s] -->", "container-"+component.Params.DynamicPlaceholderID))
-		@render.RenderPhWId("container-"+component.Params.DynamicPlaceholderID, component.Placeholders, component.UID, sc)
+	<div class={ render.DecorateComponent("component ", component) }>
+		<div class=" container mx-auto px-4 py-8">
+			<div class="flex flex-wrap -mx-4">
+				@templ.Raw(fmt.Sprintf("<!-- Placeholder: [%s] -->", "container-"+component.Params.DynamicPlaceholderID))
+				@render.RenderPhWId("container-"+component.Params.DynamicPlaceholderID, component.Placeholders, component.UID,
+					sc)
+			</div>
+		</div>
 	</div>
 }

@@ -54,7 +54,7 @@ func defaultImageVariant(component model.PlaceholderComponent, sc model.Sitecore
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = render.ImageField(component.Fields, "Image").Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = render.ImageField(component.Fields, "Image", "").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

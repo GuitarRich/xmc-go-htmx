@@ -29,7 +29,7 @@ func Container(component model.PlaceholderComponent, sc model.SitecoreContext) t
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		var templ_7745c5c3_Var2 = []any{render.DecorateComponent("container w-full mx-auto sm:max-w-lg md:max-w-2xl lg:max-w-4xl", component)}
+		var templ_7745c5c3_Var2 = []any{render.DecorateComponent("component ", component)}
 		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var2...)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -47,7 +47,7 @@ func Container(component model.PlaceholderComponent, sc model.SitecoreContext) t
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\" container mx-auto px-4 py-8\"><div class=\"flex flex-wrap -mx-4\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -55,11 +55,12 @@ func Container(component model.PlaceholderComponent, sc model.SitecoreContext) t
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = render.RenderPhWId("container-"+component.Params.DynamicPlaceholderID, component.Placeholders, component.UID, sc).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = render.RenderPhWId("container-"+component.Params.DynamicPlaceholderID, component.Placeholders, component.UID,
+			sc).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

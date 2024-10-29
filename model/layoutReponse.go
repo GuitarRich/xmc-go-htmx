@@ -44,6 +44,7 @@ type Placeholder struct {
 
 type RichTextField struct {
 	Value    interface{}  `json:"value"`
+	Editable string       `json:"editable"`
 	Metadata MetadataData `json:"metadata"`
 }
 
@@ -58,19 +59,28 @@ type ImageField struct {
 }
 
 type LinkField struct {
-	Href        string       `json:"href"`
-	Anchor      string       `json:"anchor"`
-	Querystring string       `json:"querystring"`
-	Text        string       `json:"text"`
-	Target      string       `json:"target"`
-	Title       string       `json:"title"`
-	Class       string       `json:"class"`
-	Metadata    MetadataData `json:"metadata"`
+	Value struct {
+		Href        string `json:"href"`
+		Anchor      string `json:"anchor"`
+		Querystring string `json:"querystring"`
+		Text        string `json:"text"`
+		Target      string `json:"target"`
+		Title       string `json:"title"`
+		Class       string `json:"class"`
+	} `json:"value"`
+	Metadata MetadataData `json:"metadata"`
 }
 
 type ScField struct {
 	Value    interface{}  `json:"value"`
 	Metadata MetadataData `json:"metadata"`
+}
+
+type ImageFragment struct {
+	Src    string `xml:"src,attr"`
+	Alt    string `xml:"alt,attr"`
+	Width  string `xml:"width,attr"`
+	Height string `xml:"height,attr"`
 }
 
 type PlaceholderComponent struct {
@@ -84,6 +94,7 @@ type PlaceholderComponent struct {
 		DynamicPlaceholderID string `json:"DynamicPlaceholderId"`
 		Sig                  string `json:"sig"`
 		Ph                   string `json:"ph"`
+		BackgroundImage      string `json:"BackgroundImage"`
 	} `json:"params"`
 	Fields       interface{}                       `json:"fields"`
 	Placeholders map[string][]PlaceholderComponent `json:"placeholders"`

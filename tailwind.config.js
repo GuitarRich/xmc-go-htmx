@@ -2,7 +2,7 @@
 const colors = require("tailwindcss/colors");
 
 module.exports = {
-  content: ["./view/**/*.{templ,html,js,ts}"],
+  content: ["./view/**/*.{templ,html,js,ts,go}"],
   safelist: [
     {
       pattern: /basis-/,
@@ -14,6 +14,10 @@ module.exports = {
     },
     {
       pattern: /static|fixed|relative|absolute/,
+    },
+    {
+      pattern: /rounded-/,
+      variants: ["sm", "md", "lg", "xl", "2xl"],
     },
   ],
   theme: {
@@ -89,11 +93,11 @@ module.exports = {
       },
     },
     borderRadius: {
+      full: "9999px",
       xl: `calc(var(--radius) * 2)`,
       lg: `var(--radius)`,
       md: `calc(var(--radius) - 2px)`,
       sm: "calc(var(--radius) - 4px)",
-      full: "9999px",
     },
     screens: {
       sm: "481px",

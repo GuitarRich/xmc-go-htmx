@@ -1,0 +1,86 @@
+package atoms
+
+import "strings"
+
+const mainButtonClass = `inline-flex items-center justify-center whitespace-nowrap text-sm font-medium
+ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
+focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50`
+
+type ButtonStyle string
+
+const (
+	ButtonStyleDefault     ButtonStyle = "bg-primary text-primary-foreground hover:bg-primary/90"
+	ButtonStyleDescructive             = "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+	ButtonStyleOutline                 = "border border-input bg-background hover:bg-accent hover:text-accent-foreground"
+	ButtonStyleSecondary               = "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+	ButtonStyleGhost                   = "hover:bg-accent hover:text-accent-foreground"
+	ButtonStyleLink                    = "text-primary underline-offset-4 hover:underline"
+)
+
+type ButtonSize string
+
+const (
+	ButtonSizeNormal ButtonSize = "h-10 rounded-md py-2 px-4"
+	ButtonSizeSmall             = "h-9 rounded-full px-3"
+	ButtonSizeLarge             = "h-11 rounded-full px-8"
+	ButtonSizeIcon              = "h-10 rounded-md w-10"
+)
+
+type ButtonProps struct {
+	Size    ButtonSize  `json:"size"`
+	Style   ButtonStyle `json:"style"`
+	Classes string      `json:"classes"`
+}
+
+func Button(props ButtonProps) templ.Component {
+	size := props.Size
+	style := props.Style
+
+	if size == "" {
+		size = ButtonSizeNormal
+	}
+
+	if style == "" {
+		style = ButtonStyleDefault
+	}
+
+	classes := twMerge(string(size), string(style), props.Classes)
+	return renderButton(classes)
+}
+
+func union(a, b []string) []string {
+	values := make(map[string]bool)
+
+	for _, item := range a {
+		values[item] = true
+	}
+
+	for _, item := range b {
+		if _, ok := values[item]; !ok {
+			values[item] = true
+		}
+	}
+
+	result := make([]string, 0, len(values))
+	for key := range values {
+		result = append(result, key)
+	}
+
+	return result
+}
+
+func twMerge(size, style, customClasses string) string {
+	defaultClass := strings.Split(mainButtonClass, " ")
+
+	classes := union(defaultClass, strings.Split(style, " "))
+	classes = union(classes, strings.Split(size, " "))
+	classes = union(classes, strings.Split(customClasses, " "))
+
+	return strings.Join(classes, " ")
+}
+
+templ renderButton(classes string) {
+	<button class={ classes }>
+		{ children... }
+	</button>
+}

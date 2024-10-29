@@ -1,102 +1,139 @@
 package components
 
 import (
-	"fmt"
+"encoding/xml"
+"fmt"
 
-	"github.com/guitarrich/headless-go-htmx/model"
-	"github.com/guitarrich/headless-go-htmx/sitecore/render"
+"github.com/guitarrich/headless-go-htmx/model"
+"github.com/guitarrich/headless-go-htmx/sitecore/render"
+"github.com/mitchellh/mapstructure"
 )
 
 type NavigationModel struct {
-	Id              string
-	Styles          []string
-	Href            string
-	Querystring     string
-	NavigationTitle string
-	Children        []NavigationModel
+navigationLinks []NavigationLink
+}
+
+type NavigationTitle struct {
+Value string `json:"value"`
+Editable string `json:"editable"`
+Metadata model.MetadataData `json:"metadata"`
+}
+
+type NavigationLink struct {
+Id string
+Styles []string
+Href string
+Querystring string
+NavigationTitle model.RichTextField
+Children []NavigationLink
 }
 
 func Navigation(props model.PlaceholderComponent, sc model.SitecoreContext) templ.Component {
-	fields := props.Fields.([]interface{})[0].(map[string]interface{})
+navigationLinks := props.Fields.([]interface{})
 
-	model := buildNavigationModel(fields)
-	return defaultNavigation(props, model)
+var model NavigationModel
+for _, navigationLink := range navigationLinks {
+model.navigationLinks = append(model.navigationLinks, buildNavigationModel(navigationLink.(map[string]interface{})))
+}
+return defaultNavigation(props, model)
 }
 
-func buildNavigationModel(fields map[string]interface{}) NavigationModel {
+func buildNavigationModel(fields map[string]interface{}) NavigationLink {
+var model NavigationLink
+err := mapstructure.Decode(fields, &model)
+if err != nil {
+fmt.Printf("buildNavigationModel: not a NavigationLink, %s", err)
+return model
+}
 
-	// Build the model from the props
-	var model NavigationModel
-	model.Id = getSafeString(fields["Id"])
-	model.Href = getSafeString(fields["Href"])
-	model.Styles = getStyles(fields["Styles"])
-	model.Querystring = getSafeString(fields["Querystring"])
-	model.NavigationTitle = getNavigationTitle(fields["NavigationTitle"])
-	model.Children = []NavigationModel{}
-
-	if fields["Children"] != nil {
-		children := fields["Children"].([]interface{})
-		for _, child := range children {
-			model.Children = append(model.Children, buildNavigationModel(child.(map[string]interface{})))
-		}
-	}
-
-	fmt.Printf("NavigationModel: %+v\n", model)
-
-	return model
+return model
 }
 
 func getSafeString(field interface{}) string {
-	if field == nil {
-		fmt.Println("GetSafeString: nil")
-		return ""
-	}
-	return field.(string)
+if field == nil {
+fmt.Println("GetSafeString: nil")
+return ""
+}
+return field.(string)
 }
 
 func getStyles(field interface{}) []string {
-	if field == nil {
-		return []string{}
-	}
-	tmp := field.([]interface{})
-	var result = []string{}
-	for _, v := range tmp {
-		result = append(result, v.(string))
-	}
+if field == nil {
+return []string{}
+}
+tmp := field.([]interface{})
+var result = []string{}
+for _, v := range tmp {
+result = append(result, v.(string))
+}
 
-	return result
+return result
 }
 
 func getNavigationTitle(field interface{}) string {
-	if field == nil {
-		return ""
-	}
+if field == nil {
+return ""
+}
 
-	return field.(map[string]interface{})["value"].(string)
+return field.(map[string]interface{})["value"].(string)
+}
+
+func getBackgroundImage(props model.PlaceholderComponent) string {
+if props.Fields == nil {
+return ""
+}
+var imageFragment model.ImageFragment
+err := xml.Unmarshal([]byte(props.Params.BackgroundImage), &imageFragment)
+if err != nil {
+fmt.Printf("getBackgroundImage: not an imageFragment, %s", err)
+return ""
+}
+return imageFragment.Src
 }
 
 templ defaultNavigation(props model.PlaceholderComponent, model NavigationModel) {
-	<div class={ render.DecorateComponent("component navigation", props) }>
-		<div class="bg-scwhite md:bg-gradient-sc bg-xl text-scwhite">
-			<nav class="w-full shadow-md">
-				<div>
-					<div class="hidden md:block">
-						<div class="mx-auto flex max-w-[1004px] justify-between p-4">
-							<h2 class="flex flex-auto">Links Here</h2>
-							for _, item := range model.Children {
-								<a href={ templ.URL(item.Href) } class="flex flex-auto">
-									{ item.NavigationTitle }
+<div class={ render.DecorateComponent("component navigation", props) }>
+	<div class="bg-scwhite md:bg-gradient-sc bg-xl text-scwhite">
+		<nav class="w-full shadow-md">
+			<div>
+				<div class="hidden md:block">
+					<div class="mx-auto flex max-w-[1004px] justify-between p-4">
+						for _, item := range model.navigationLinks {
+						<a href={ templ.URL(item.Href) } class="flex flex-auto">
+							@render.RenderRichText(item.NavigationTitle)
+						</a>
+						}
+					</div>
+					<div class="bg-scwhite text-scblack">
+						<div
+							class="item-center relative mx-auto box-border flex w-[1004px] max-w-full flex-wrap justify-start px-5">
+							<div class="flex basis-1/6 flex-wrap items-center justify-text pb-4 pt-2">
+								<a href="/" class="flex-shrink-0">
+									<img src={ getBackgroundImage(props) } alt="Logo" class="h-8 auto" />
 								</a>
-							}
+							</div>
+							<a href="/search" class="text-scblack justify-end">
+								Search
+							</a>
 						</div>
-						<div class="bg-scwhite text-scblack">
-							<div
-								class="item-center relative mx-auto box-border flex w-[1004px] max-w-full flex-wrap justify-start px-5"
-							></div>
+					</div>
+					<div className="md:hidden">
+						<div className="flex h-12 items-center justify-between px-4 pt-4 pb-5 md:px-0">
+							<a href="/" class="mx-auto flex-shrink-0">
+								<img src={mediaUrl} alt="Logo" className="h-8 w-auto" />
+							</a>
+							<button onClick={toggleMenu} className="text-scblack hover:text-scblue z-50">
+								{isOpen ? (
+								<X className="text-scblack h-6 w-6" />
+								) : (
+								<Menu className="h-6 w-6" />
+								)}
+							</button>
 						</div>
 					</div>
 				</div>
-			</nav>
-		</div>
+			</div>
+		</nav>
 	</div>
+</div>
 }

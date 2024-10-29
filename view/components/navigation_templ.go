@@ -11,47 +11,50 @@ import "io"
 import "bytes"
 
 import (
+	"encoding/xml"
 	"fmt"
 
 	"github.com/guitarrich/headless-go-htmx/model"
 	"github.com/guitarrich/headless-go-htmx/sitecore/render"
+	"github.com/mitchellh/mapstructure"
 )
 
 type NavigationModel struct {
+	navigationLinks []NavigationLink
+}
+
+type NavigationTitle struct {
+	Value    string             `json:"value"`
+	Editable string             `json:"editable"`
+	Metadata model.MetadataData `json:"metadata"`
+}
+
+type NavigationLink struct {
 	Id              string
 	Styles          []string
 	Href            string
 	Querystring     string
-	NavigationTitle string
-	Children        []NavigationModel
+	NavigationTitle model.RichTextField
+	Children        []NavigationLink
 }
 
 func Navigation(props model.PlaceholderComponent, sc model.SitecoreContext) templ.Component {
-	fields := props.Fields.([]interface{})[0].(map[string]interface{})
+	navigationLinks := props.Fields.([]interface{})
 
-	model := buildNavigationModel(fields)
+	var model NavigationModel
+	for _, navigationLink := range navigationLinks {
+		model.navigationLinks = append(model.navigationLinks, buildNavigationModel(navigationLink.(map[string]interface{})))
+	}
 	return defaultNavigation(props, model)
 }
 
-func buildNavigationModel(fields map[string]interface{}) NavigationModel {
-
-	// Build the model from the props
-	var model NavigationModel
-	model.Id = getSafeString(fields["Id"])
-	model.Href = getSafeString(fields["Href"])
-	model.Styles = getStyles(fields["Styles"])
-	model.Querystring = getSafeString(fields["Querystring"])
-	model.NavigationTitle = getNavigationTitle(fields["NavigationTitle"])
-	model.Children = []NavigationModel{}
-
-	if fields["Children"] != nil {
-		children := fields["Children"].([]interface{})
-		for _, child := range children {
-			model.Children = append(model.Children, buildNavigationModel(child.(map[string]interface{})))
-		}
+func buildNavigationModel(fields map[string]interface{}) NavigationLink {
+	var model NavigationLink
+	err := mapstructure.Decode(fields, &model)
+	if err != nil {
+		fmt.Printf("buildNavigationModel: not a NavigationLink, %s", err)
+		return model
 	}
-
-	fmt.Printf("NavigationModel: %+v\n", model)
 
 	return model
 }
@@ -85,6 +88,19 @@ func getNavigationTitle(field interface{}) string {
 	return field.(map[string]interface{})["value"].(string)
 }
 
+func getBackgroundImage(props model.PlaceholderComponent) string {
+	if props.Fields == nil {
+		return ""
+	}
+	var imageFragment model.ImageFragment
+	err := xml.Unmarshal([]byte(props.Params.BackgroundImage), &imageFragment)
+	if err != nil {
+		fmt.Printf("getBackgroundImage: not an imageFragment, %s", err)
+		return ""
+	}
+	return imageFragment.Src
+}
+
 func defaultNavigation(props model.PlaceholderComponent, model NavigationModel) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
@@ -116,11 +132,11 @@ func defaultNavigation(props model.PlaceholderComponent, model NavigationModel) 
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"bg-scwhite md:bg-gradient-sc bg-xl text-scwhite\"><nav class=\"w-full shadow-md\"><div><div class=\"hidden md:block\"><div class=\"mx-auto flex max-w-[1004px] justify-between p-4\"><h2 class=\"flex flex-auto\">Links Here</h2>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"><div class=\"bg-scwhite md:bg-gradient-sc bg-xl text-scwhite\"><nav class=\"w-full shadow-md\"><div><div class=\"hidden md:block\"><div class=\"mx-auto flex max-w-[1004px] justify-between p-4\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		for _, item := range model.Children {
+		for _, item := range model.navigationLinks {
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<a href=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -134,12 +150,7 @@ func defaultNavigation(props model.PlaceholderComponent, model NavigationModel) 
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var5 string
-			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(item.NavigationTitle)
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/navigation.templ`, Line: 88, Col: 31}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+			templ_7745c5c3_Err = render.RenderRichText(item.NavigationTitle).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -148,7 +159,20 @@ func defaultNavigation(props model.PlaceholderComponent, model NavigationModel) 
 				return templ_7745c5c3_Err
 			}
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"bg-scwhite text-scblack\"><div class=\"item-center relative mx-auto box-border flex w-[1004px] max-w-full flex-wrap justify-start px-5\"></div></div></div></div></nav></div></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div><div class=\"bg-scwhite text-scblack\"><div class=\"item-center relative mx-auto box-border flex w-[1004px] max-w-full flex-wrap justify-start px-5\"><div class=\"flex basis-1/6 flex-wrap items-center justify-text pb-4 pt-2\"><a href=\"/\" class=\"flex-shrink-0\"><img src=\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var5 string
+		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(getBackgroundImage(props))
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/navigation.templ`, Line: 112, Col: 45}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" alt=\"Logo\" class=\"h-8 auto\"></a></div><a href=\"/search\" class=\"text-scblack justify-end\">Search</a></div></div></div></div></nav></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

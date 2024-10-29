@@ -27,7 +27,7 @@ templ promoDefault(data model.PlaceholderComponent) {
 				@render.LinkField(data.Fields, "PromoLink")
 			</div>
 			<div class="field-promoimage\">
-				@render.ImageField(data.Fields, "PromoIcon")
+				@render.ImageField(data.Fields, "PromoIcon", "")
 			</div>
 		</div>
 	</div>
@@ -38,7 +38,7 @@ templ promoWithText(data model.PlaceholderComponent) {
 		@templ.Raw(fmt.Sprintf("<!-- WithText Component Data: %s -->", data))
 		<div class="component-content">
 			<div class="field-withtext">
-				<h2>WithText</h2>
+				<h2>WithText</h2>\
 				@render.RichTextField(data.Fields, "PromoText")
 			</div>
 		</div>
