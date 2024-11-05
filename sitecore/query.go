@@ -3,6 +3,7 @@ package sitecore
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -32,9 +33,15 @@ func RunQueryWithParameters(query string, queryName string, headers map[string]s
 		Timeout: time.Second * 10,
 	}
 
-	req, err := http.NewRequest("POST", GetEnvVar("GRAPHQL_ENDPOINT"), bytes.NewBuffer(jsonData))
+	sitecoreEdgeUrl := GetEnvVar("SITECORE_EDGE_URL")
+	if sitecoreEdgeUrl == "" {
+		sitecoreEdgeUrl = "https://edge-platform.sitecorecloud.io"
+	}
+	sitecoreContextId := GetEnvVar("SITECORE_EDGE_CONTEXT_ID")
+	sitecoreEdgeUrl = fmt.Sprintf("%s/v1/content/api/graphql/v1?sitecoreContextId=%s", sitecoreEdgeUrl, sitecoreContextId)
+
+	req, err := http.NewRequest("POST", sitecoreEdgeUrl, bytes.NewBuffer(jsonData))
 	req.Header.Set("Content-Type", "application/json")
-	req.Header.Set("sc_apikey", GetEnvVar("SITECORE_API_KEY"))
 
 	for key, value := range headers {
 		req.Header.Set(key, value)

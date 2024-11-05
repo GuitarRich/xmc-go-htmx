@@ -10,7 +10,8 @@ import (
 
 func GetEnvVar(key string) string {
 	godotenv.Load()
-	return os.Getenv(key)
+	result := os.Getenv(key)
+	return result
 }
 
 func GetSafeString(field interface{}) string {
