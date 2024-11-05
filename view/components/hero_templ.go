@@ -15,10 +15,16 @@ import (
 	"github.com/guitarrich/headless-go-htmx/model"
 	"github.com/guitarrich/headless-go-htmx/sitecore/render"
 	"github.com/guitarrich/headless-go-htmx/view/components/atoms"
+	"strings"
 )
 
 func buildStyle(props model.PlaceholderComponent) string {
-	return fmt.Sprintf("--image-url:url('%s');", render.GetImageField(props.Fields, "HeroImage").Value.Src)
+	imageUrl := render.GetImageField(props.Fields, "HeroImage").Value.Src
+	if strings.Contains(imageUrl, "/-/media/") {
+		trimTo := strings.Index(imageUrl, "/-/media/")
+		imageUrl = imageUrl[trimTo : len(imageUrl)-1]
+	}
+	return fmt.Sprintf("--image-url:url('%s');", imageUrl)
 }
 
 const backgroundStyle = "component hero bg-white bg-[image:var(--image-url)] bg-cover bg-center"

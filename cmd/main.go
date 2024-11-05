@@ -9,6 +9,7 @@ import (
 	"github.com/guitarrich/headless-go-htmx/middleware/editing"
 	"github.com/guitarrich/headless-go-htmx/pipelines/request"
 	"github.com/guitarrich/headless-go-htmx/sitecore"
+	"github.com/guitarrich/headless-go-htmx/sitecore/schandlers"
 	"github.com/guitarrich/headless-go-htmx/view/components"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -33,6 +34,8 @@ func main() {
 	editingHandler := editing.EditingRequestHandler{}
 	app.GET("/api/editing/config", editingHandler.Config)
 	app.GET("/api/editing/render", editingHandler.Render)
+
+	app.GET("/-/media/*", schandlers.NewMediaHandler().ServeHTTP)
 
 	s := &http2.Server{
 		MaxConcurrentStreams: 250,

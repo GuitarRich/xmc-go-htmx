@@ -24,4 +24,4 @@ bin
 go.work
 
 # Environment variables
-.env
+.env.local
