@@ -10,12 +10,22 @@ templ RenderPlaceholder(phk string, ph map[string][]model.PlaceholderComponent, 
 }
 
 templ RenderPhWId(phk string, ph map[string][]model.PlaceholderComponent, id string, sc model.SitecoreContext) {
-	@templ.Raw(RenderPlaceholderOpen(phk, id, sc))
 	<div class="flex flex-row flex-wrap w-full">
-		@templ.Raw(fmt.Sprintf("<!-- Placeholder: [%s] -->", phk))
-		for _, component := range ph[phk] {
-			@RenderComponent(component, sc)
+		@templ.Raw(fmt.Sprintf("<!-- Placeholder: [%s, Count(%s)] -->", phk, len(ph[phk])))
+		if len(ph[phk]) > 0 {
+			@templ.Raw(RenderPlaceholderOpen(phk, id, sc))
+			for _, component := range ph[phk] {
+				@RenderComponent(component, sc)
+			}
+			@templ.Raw(RenderPlaceholderClose(phk, sc))
+		} else {
+			<div class="sc-jss-empty-placeholder">
+				@templ.Raw(RenderPlaceholderOpen(phk, id, sc))
+				for _, component := range ph[phk] {
+					@RenderComponent(component, sc)
+				}
+				@templ.Raw(RenderPlaceholderClose(phk, sc))
+			</div>
 		}
 	</div>
-	@templ.Raw(RenderPlaceholderClose(phk, sc))
 }

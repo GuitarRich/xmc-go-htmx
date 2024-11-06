@@ -49,9 +49,7 @@ fmt.Sprintf("<div style=\"%s\" class=\"%s\">", buildStyle(component),
 					<div class="mt-8 gap-3 flex justify-center">
 						@atoms.Button(atoms.ButtonProps{
 						Size: atoms.ButtonSizeLarge,
-						}) {
-						@render.LinkField(component.Fields, "HeroLink")
-						}
+						}, component.Fields, "HeroLink")
 					</div>
 				</div>
 			</div>

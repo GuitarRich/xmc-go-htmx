@@ -34,17 +34,13 @@ templ ctaDefault(props model.PlaceholderComponent, sc model.SitecoreContext) {
 						if render.LinkFieldHasLink(props.Fields, "CTALink") {
 						@atoms.Button(atoms.ButtonProps{
 							Size: atoms.ButtonSizeLarge,
-						}) {
-							@render.LinkField(props.Fields, "CTALink")
-						}
+						}, props.Fields, "CTALink")
 						}
 						if render.LinkFieldHasLink(props.Fields, "CTALink2") {
 						@atoms.Button(atoms.ButtonProps{
 							Size:  atoms.ButtonSizeLarge,
 							Style: atoms.ButtonStyleOutline,
-						}) {
-							@render.LinkField(props.Fields, "CTALink2")
-						}
+						}, props.Fields, "CTALink2")
 						}
 					</div>
 				</div>
@@ -74,17 +70,13 @@ templ ctaImageLeft(props model.PlaceholderComponent, sc model.SitecoreContext) {
 						if render.LinkFieldHasLink(props.Fields, "CTALink") {
 						@atoms.Button(atoms.ButtonProps{
 							Size: atoms.ButtonSizeLarge,
-						}) {
-							@render.LinkField(props.Fields, "CTALink")
-						}
+						},props.Fields, "CTALink")
 						}
 						if render.LinkFieldHasLink(props.Fields, "CTALink2") {
 						@atoms.Button(atoms.ButtonProps{
 							Size:  atoms.ButtonSizeLarge,
 							Style: atoms.ButtonStyleOutline,
-						}) {
-							@render.LinkField(props.Fields, "CTALink2")
-						}
+						}, props.Fields, "CTALink2")
 						}
 					</div>
 				</div>
@@ -109,9 +101,7 @@ templ ctaCard(props model.PlaceholderComponent) {
 					@atoms.Button(atoms.ButtonProps{
 						Size:    atoms.ButtonSizeLarge,
 						Classes: "w-full",
-					}) {
-						@render.LinkField(props.Fields, "CTALink")
-					}
+					}, props.Fields, "CTALink")
 					}
 				</div>
 			</div>

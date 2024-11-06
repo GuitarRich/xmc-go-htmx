@@ -26,8 +26,7 @@ func (h *RequestPipelineHandler) Run(c echo.Context) error {
 
 	editMode := c.Request().URL.Query().Get("mode") == "edit"
 	if editMode {
-
-		sitecore.RendererLog("Editing mode\n")
+		sitecore.RendererLog("This is Editing mode\n")
 		queryName = "EditingQuery"
 		var previewData editing.EditingMetadataPreviewData
 		previewData.Site = c.Request().URL.Query().Get("sc_site")

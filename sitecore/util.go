@@ -29,5 +29,6 @@ func AddIfNotEmpty(name string, value string) string {
 }
 
 func IsEditMode(data model.SitecoreContext) bool {
-	return data.EditMode == "edit"
+	fmt.Printf("SitecoreContext.PageState::%s\n", data.PageState)
+	return data.PageEditing
 }

@@ -24,6 +24,10 @@ func main() {
 	app.Static("/js", "js")
 	app.Static("/img", "img")
 
+	app.Use(middleware.GzipWithConfig(middleware.GzipConfig{
+		Level: 5,
+	}))
+
 	app.Use(middleware.Logger())
 
 	components.RegisterComponents()

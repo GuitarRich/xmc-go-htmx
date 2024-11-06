@@ -41,7 +41,6 @@ func GetFieldWithFallback(fields interface{}, fieldNames ...string) string {
 	var result model.RichTextField
 	var ok bool
 	for _, fieldName := range fieldNames {
-		fmt.Printf("\nGetting field [%s]", fieldName)
 		result, ok = GetRichTextField(fields, fieldName)
 		if ok {
 			return fmt.Sprintf("%s", result.Value)
@@ -73,9 +72,9 @@ func GetRichTextField(fields interface{}, fieldName string) (model.RichTextField
 	return result, true
 }
 
-func LinkField(fields interface{}, fieldName string) templ.Component {
+func LinkField(fields interface{}, fieldName string, classNames ...string) templ.Component {
 	field := GetLinkField(fields, fieldName)
-	return renderFieldMetadata(field.Metadata, renderLink(field))
+	return renderFieldMetadata(field.Metadata, renderLink(field, classNames...))
 }
 
 func LinkFieldHasLink(fields interface{}, fieldName string) bool {
@@ -83,7 +82,7 @@ func LinkFieldHasLink(fields interface{}, fieldName string) bool {
 	return field.Value.Href != ""
 }
 
-func renderLink(field model.LinkField) templ.Component {
+func renderLink(field model.LinkField, classNames ...string) templ.Component {
 	href := field.Value.Href
 	if field.Value.Querystring != "" {
 		href += "?" + field.Value.Querystring
@@ -95,7 +94,12 @@ func renderLink(field model.LinkField) templ.Component {
 	link := fmt.Sprintf("<a  href=\"%s\"", href)
 	link += sitecore.AddIfNotEmpty("target", field.Value.Target)
 	link += sitecore.AddIfNotEmpty("title", field.Value.Title)
-	link += sitecore.AddIfNotEmpty("class", field.Value.Class)
+
+	cssClasses := field.Value.Class
+	for _, className := range classNames {
+		cssClasses += " " + className
+	}
+	link += sitecore.AddIfNotEmpty("class", cssClasses)
 
 	if field.Value.Target == "_blank" {
 		link += " rel=\"noopener noreferrer\""
@@ -162,28 +166,28 @@ func GetImageField(fields interface{}, fieldName string) model.ImageField {
 		fmt.Println("GetImageField: not a map")
 		return model.ImageField{}
 	}
-	baseField, ok := fieldMap[fieldName].(map[string]interface{})["value"].(map[string]interface{})
+	baseField, ok := fieldMap[fieldName].(map[string]interface{})
 	if !ok {
 		fmt.Println("GetImageField: not a field")
 		return model.ImageField{}
 	}
 
 	var imageField model.ImageField
-	imageField.Value.Src = sitecore.GetSafeString(baseField["src"])
-	imageField.Value.Alt = sitecore.GetSafeString(baseField["alt"])
-	imageField.Value.Width = sitecore.GetSafeString(baseField["width"])
-	imageField.Value.Height = sitecore.GetSafeString(baseField["height"])
+	err := mapstructure.Decode(baseField, &imageField)
+	if err != nil {
+		fmt.Printf("GetImageField: not an ImageField, %s", err)
+		return model.ImageField{}
+	}
 
 	return imageField
 }
 
 func RenderPlaceholderOpen(placeholderKey string, id string, context model.SitecoreContext) string {
-	isEditing := sitecore.IsEditMode(context)
 	if id == "" {
 		id = "00000000-0000-0000-0000-000000000000"
 	}
 	var result strings.Builder
-	if isEditing {
+	if context.PageEditing {
 		result.WriteString("<code type=\"text/sitecore\" chrometype=\"placeholder\" class=\"scpm\" kind=\"open\"")
 		result.WriteString("id=\"")
 		result.WriteString(fmt.Sprintf("%s-%s", placeholderKey, id))
@@ -194,19 +198,16 @@ func RenderPlaceholderOpen(placeholderKey string, id string, context model.Sitec
 }
 
 func RenderPlaceholderClose(placeholderKey string, context model.SitecoreContext) string {
-	isEditing := sitecore.IsEditMode(context)
-	var result strings.Builder
-	if isEditing {
-		result.WriteString("<code type=\"text/sitecore\" chrometype=\"placeholder\" class=\"scpm\" kind=\"close\" style=\"cursor:pointer;\"></code>")
+	if context.PageEditing {
+		return "<code type=\"text/sitecore\" chrometype=\"placeholder\" class=\"scpm\" kind=\"close\" style=\"cursor:pointer;\"></code>"
 	}
 
-	return result.String()
+	return ""
 }
 
 func RenderComponentOpen(component model.PlaceholderComponent, context model.SitecoreContext) string {
-	isEditing := sitecore.IsEditMode(context)
 	var result strings.Builder
-	if isEditing {
+	if context.PageEditing {
 		result.WriteString("<code type=\"text/sitecore\" chrometype=\"rendering\" class=\"scpm\" kind=\"open\"")
 		result.WriteString("id=\"")
 		result.WriteString(component.UID)
@@ -217,11 +218,9 @@ func RenderComponentOpen(component model.PlaceholderComponent, context model.Sit
 }
 
 func RenderComponentClose(component model.PlaceholderComponent, context model.SitecoreContext) string {
-	isEditing := sitecore.IsEditMode(context)
-	var result strings.Builder
-	if isEditing {
-		result.WriteString("<code type=\"text/sitecore\" chrometype=\"rendering\" class=\"scpm\" kind=\"close\" style=\"cursor:pointer;\"></code>")
+	if context.PageEditing {
+		return "<code type=\"text/sitecore\" chrometype=\"rendering\" class=\"scpm\" kind=\"close\" style=\"cursor:pointer;\"></code>"
 	}
 
-	return result.String()
+	return ""
 }

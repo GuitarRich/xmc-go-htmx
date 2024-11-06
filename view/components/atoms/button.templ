@@ -1,6 +1,7 @@
 package atoms
 
 import "strings"
+import "github.com/guitarrich/headless-go-htmx/sitecore/render"
 
 const mainButtonClass = `inline-flex items-center justify-center whitespace-nowrap text-sm font-medium
 ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
@@ -32,7 +33,7 @@ type ButtonProps struct {
 	Classes string      `json:"classes"`
 }
 
-func Button(props ButtonProps) templ.Component {
+func Button(props ButtonProps, fields interface{}, fieldName string, classNames ...string) templ.Component {
 	size := props.Size
 	style := props.Style
 
@@ -44,8 +45,8 @@ func Button(props ButtonProps) templ.Component {
 		style = ButtonStyleDefault
 	}
 
-	classes := twMerge(string(size), string(style), props.Classes)
-	return renderButton(classes)
+	classes := twMerge(string(size), string(style), props.Classes, classNames...)
+	return renderButton(fields, fieldName, classes)
 }
 
 func union(a, b []string) []string {
@@ -69,18 +70,20 @@ func union(a, b []string) []string {
 	return result
 }
 
-func twMerge(size, style, customClasses string) string {
+func twMerge(size, style, customClasses string, classNames ...string) string {
 	defaultClass := strings.Split(mainButtonClass, " ")
 
 	classes := union(defaultClass, strings.Split(style, " "))
 	classes = union(classes, strings.Split(size, " "))
 	classes = union(classes, strings.Split(customClasses, " "))
 
+	for _, className := range classNames {
+		classes = union(classes, strings.Split(className, " "))
+	}
+
 	return strings.Join(classes, " ")
 }
 
-templ renderButton(classes string) {
-	<button class={ classes }>
-		{ children... }
-	</button>
+templ renderButton(fields interface{}, fieldName string, classes string) {
+	@render.LinkField(fields, fieldName, classes)
 }

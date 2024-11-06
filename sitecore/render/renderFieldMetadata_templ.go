@@ -12,6 +12,7 @@ import "bytes"
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/guitarrich/headless-go-htmx/model"
 )
 
@@ -36,6 +37,10 @@ func RenderFieldMetadata(metadata model.MetadataData, field templ.Component) tem
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Err = templ.Raw(fmt.Sprintf("<!-- Field Metadata: %+v -->", metadata)).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
 		if metadata.FieldId != "" {
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<code type=\"text/sitecore\" chrometype=\"field\" class=\"scpm\" kind=\"open\">")
 			if templ_7745c5c3_Err != nil {

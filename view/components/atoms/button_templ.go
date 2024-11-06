@@ -11,6 +11,7 @@ import "io"
 import "bytes"
 
 import "strings"
+import "github.com/guitarrich/headless-go-htmx/sitecore/render"
 
 const mainButtonClass = `inline-flex items-center justify-center whitespace-nowrap text-sm font-medium
 ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
@@ -42,7 +43,7 @@ type ButtonProps struct {
 	Classes string      `json:"classes"`
 }
 
-func Button(props ButtonProps) templ.Component {
+func Button(props ButtonProps, fields interface{}, fieldName string, classNames ...string) templ.Component {
 	size := props.Size
 	style := props.Style
 
@@ -54,8 +55,8 @@ func Button(props ButtonProps) templ.Component {
 		style = ButtonStyleDefault
 	}
 
-	classes := twMerge(string(size), string(style), props.Classes)
-	return renderButton(classes)
+	classes := twMerge(string(size), string(style), props.Classes, classNames...)
+	return renderButton(fields, fieldName, classes)
 }
 
 func union(a, b []string) []string {
@@ -79,17 +80,21 @@ func union(a, b []string) []string {
 	return result
 }
 
-func twMerge(size, style, customClasses string) string {
+func twMerge(size, style, customClasses string, classNames ...string) string {
 	defaultClass := strings.Split(mainButtonClass, " ")
 
 	classes := union(defaultClass, strings.Split(style, " "))
 	classes = union(classes, strings.Split(size, " "))
 	classes = union(classes, strings.Split(customClasses, " "))
 
+	for _, className := range classNames {
+		classes = union(classes, strings.Split(className, " "))
+	}
+
 	return strings.Join(classes, " ")
 }
 
-func renderButton(classes string) templ.Component {
+func renderButton(fields interface{}, fieldName string, classes string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -102,33 +107,7 @@ func renderButton(classes string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		var templ_7745c5c3_Var2 = []any{classes}
-		templ_7745c5c3_Err = templ.RenderCSSItems(ctx, templ_7745c5c3_Buffer, templ_7745c5c3_Var2...)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<button class=\"")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		var templ_7745c5c3_Var3 string
-		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(templ.CSSClasses(templ_7745c5c3_Var2).String())
-		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `view/components/atoms/button.templ`, Line: 1, Col: 0}
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templ_7745c5c3_Var1.Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</button>")
+		templ_7745c5c3_Err = render.LinkField(fields, fieldName, classes).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
