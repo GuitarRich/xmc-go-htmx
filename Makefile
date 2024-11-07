@@ -5,6 +5,6 @@ tailwind:
 	@tailwindcss  -i ./css/tailwind.css -o css/main.css --watch
 
 run:
-	@npm run build
+	@npm run build:prodution
 	@templ generate
 	@go run cmd/main.go
