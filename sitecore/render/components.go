@@ -190,7 +190,7 @@ func RenderPlaceholderOpen(placeholderKey string, id string, context model.Sitec
 	if context.PageEditing {
 		result.WriteString("<code type=\"text/sitecore\" chrometype=\"placeholder\" class=\"scpm\" kind=\"open\"")
 		result.WriteString("id=\"")
-		result.WriteString(fmt.Sprintf("%s-%s", placeholderKey, id))
+		result.WriteString(fmt.Sprintf("%s_%s", placeholderKey, id))
 		result.WriteString("\" style=\"cursor:pointer;\"></code>")
 	}
 
